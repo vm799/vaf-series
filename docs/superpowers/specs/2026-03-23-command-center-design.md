@@ -73,6 +73,50 @@ vaf-am-build-01-ingestion/reports/ingestion_report.json
     → dashboard shows real documents + summaries
 ```
 
+### Build Data JSON Schema
+
+`build_01.json` (and all subsequent build data files) must conform to this shape:
+
+```json
+{
+  "generated_at": "2026-03-23T21:46:45.307887",   // ISO timestamp — pipeline end time
+  "count": 32,                                       // total documents ingested
+  "documents": [
+    {
+      "id": "uuid-string",
+      "source_type": "rss" | "pdf" | "web",         // drives source badge colour
+      "title": "Document title",                     // shown in document card header
+      "summary": "3-sentence Claude summary...",     // shown in purple summary block
+      "ingested_at": "2026-03-23T21:46:33.152428"   // ISO timestamp per document
+    }
+  ]
+}
+```
+
+**UI field mapping:**
+- `count` → "X documents ingested" in Business Value Banner and Audit Log footer
+- `generated_at` minus earliest `ingested_at` → pipeline runtime (displayed as seconds in Business Value Banner — computed dynamically)
+- `source_type` → badge colour (rss=blue, pdf=purple, web=green) and source filter
+- `title` + `summary` + `ingested_at` → document card content
+- Display 3 document cards in the demo panel: one `rss`, one `pdf`, one `web` — pick the first of each `source_type` from the array
+
+### `status.json` Field Reference
+
+All builds must include `featured` (boolean, defaults to `false`). Only Build 06 sets it to `true`.
+
+```json
+{
+  "id": "06",
+  "name": "Council",
+  "day": 3,
+  "status": "queued",
+  "data": null,
+  "featured": true
+}
+```
+
+The `featured: true` flag renders the build card with an amber border and a `FEATURED` badge regardless of status. All other builds omit `featured` or set it to `false`.
+
 ---
 
 ## Dashboard Layout
@@ -95,7 +139,7 @@ Large featured card showing the **current day's active build**:
 - Estimated build time
 - Pain point solved (one sentence, bold)
 
-Hero card **shifts each day** — Monday shows Build 01, Tuesday shifts to Build 03, etc. Determined by `current_day` in `status.json`.
+Hero card **shifts each day** — determined by this rule: find all builds where `day === current_day` AND `status === "live"`. Show the one with the lowest `id`. If no builds on the current day are live yet, fall back to the most recently live build across any day (highest `id` with `status === "live"`). If no builds are live at all, show a placeholder "No active build — check back soon."
 
 ### Section 3 — 5-Day Kanban (below hero)
 Five columns: MON · TUE · WED · THU · FRI
@@ -108,7 +152,9 @@ Each column contains the build cards for that day:
 - **Build 06 (Council ⭐)**: amber border, FEATURED badge — pre-flagged as showpiece
 
 ### Section 4 — Build 01 Expanded Demo Panel
-Triggered when user clicks on Build 01 hero card. Contains:
+**Interaction:** Clicking the hero card toggles an expanded panel that slides open inline directly below the hero card (no modal/overlay). Clicking the hero card again collapses it. Only one panel can be open at a time. No animation required — show/hide via CSS `display` toggle is sufficient.
+
+Contains:
 
 **a) Business Value Banner**
 Full-width blue gradient. Four stats:
@@ -134,12 +180,20 @@ Three document cards (one per source type), each showing:
 - Claude AI summary (3 sentences, purple left-border block)
 
 **d) Audit Log**
-Dark terminal-style block. Timestamped log lines:
-- Each ingester completing
-- Normaliser validating
-- Claude summarising
-- SQLite storing
-- Final completion line: `X documents · Y seconds · 0 failures`
+Dark terminal-style block. **Source:** derived from `build_01.json` at render time — not a separate log file.
+
+Rendered lines (computed from JSON fields):
+```
+[{earliest ingested_at time}]  RSSIngester    | feeds → {rss_count} docs ingested
+[{earliest ingested_at time}]  PDFIngester    | files → {pdf_count} docs ingested
+[{earliest ingested_at time}]  WebIngester    | urls  → {web_count} docs ingested
+[{earliest ingested_at time}]  Normaliser     | {count} docs → schema validated
+[{earliest ingested_at time}]  ClaudeSummariser | {count} × 3-sentence summaries generated
+[{generated_at time}]          SQLiteStore    | {count} documents saved · audit log sealed
+[{generated_at time}]          COMPLETE       | {runtime_seconds}s · {count} documents · 0 failures
+```
+
+Where `rss_count`, `pdf_count`, `web_count` = count of each `source_type` in `documents[]`. `runtime_seconds` = difference in seconds between `generated_at` and earliest `ingested_at`, rounded to nearest integer. All timestamps formatted as `HH:MM:SS`.
 
 ### Section 5 — Architecture Layers
 Five numbered layers, each with:
