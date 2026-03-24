@@ -1,0 +1,14 @@
+{
+  "current_day": 1,
+  "builds": [
+    { "id": "01", "name": "Ingestion", "day": 1, "status": "live", "data": "data/build_01.json" },
+    { "id": "02", "name": "Sanitisation", "day": 1, "status": "queued", "data": null },
+    { "id": "03", "name": "Identity", "day": 2, "status": "queued", "data": null },
+    { "id": "04", "name": "RAG", "day": 2, "status": "queued", "data": null },
+    { "id": "05", "name": "Self-Evolving", "day": 3, "status": "queued", "data": null },
+    { "id": "06", "name": "Council", "day": 3, "status": "queued", "data": null, "featured": true },
+    { "id": "07", "name": "Compliance", "day": 4, "status": "queued", "data": null },
+    { "id": "08", "name": "Synthesis", "day": 4, "status": "queued", "data": null },
+    { "id": "09", "name": "Output", "day": 5, "status": "queued", "data": null }
+  ]
+}

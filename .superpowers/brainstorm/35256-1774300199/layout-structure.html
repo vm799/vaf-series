@@ -1,0 +1,197 @@
+<h2>Command Center — Layout Structure</h2>
+<p class="subtitle">How should the 9 builds be arranged? All use the Clean Enterprise style (white cards, light background).</p>
+
+<div class="cards">
+
+  <div class="card" data-choice="A" onclick="toggleSelect(this)">
+    <div class="card-image" style="background:#f8fafc;padding:14px;border-radius:6px;border:1px solid #e2e8f0;font-family:system-ui,sans-serif;">
+      <!-- Header bar -->
+      <div style="background:#fff;border:1px solid #e2e8f0;border-radius:6px;padding:8px 12px;margin-bottom:10px;display:flex;justify-content:space-between;align-items:center;">
+        <span style="font-size:10px;font-weight:700;color:#1e293b;">VAF AM Series · Day 1 of 5</span>
+        <div style="display:flex;gap:10px;">
+          <span style="font-size:10px;color:#1d4ed8;font-weight:600;">1/9 Live</span>
+          <span style="font-size:10px;color:#64748b;">11% Complete</span>
+        </div>
+      </div>
+      <!-- Progress strip -->
+      <div style="background:#fff;border:1px solid #e2e8f0;border-radius:6px;padding:8px 12px;margin-bottom:10px;">
+        <div style="display:flex;gap:3px;">
+          <div style="flex:1;height:6px;background:#1d4ed8;border-radius:3px;"></div>
+          <div style="flex:1;height:6px;background:#e2e8f0;border-radius:3px;"></div>
+          <div style="flex:1;height:6px;background:#e2e8f0;border-radius:3px;"></div>
+          <div style="flex:1;height:6px;background:#e2e8f0;border-radius:3px;"></div>
+          <div style="flex:1;height:6px;background:#e2e8f0;border-radius:3px;"></div>
+          <div style="flex:1;height:6px;background:#e2e8f0;border-radius:3px;"></div>
+          <div style="flex:1;height:6px;background:#e2e8f0;border-radius:3px;"></div>
+          <div style="flex:1;height:6px;background:#e2e8f0;border-radius:3px;"></div>
+          <div style="flex:1;height:6px;background:#e2e8f0;border-radius:3px;"></div>
+        </div>
+      </div>
+      <!-- 3x3 build cards grid -->
+      <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:6px;">
+        <div style="background:#fff;border:1px solid #1d4ed8;border-radius:5px;padding:7px;">
+          <div style="font-size:8px;font-weight:700;color:#1d4ed8;">BUILD 01</div>
+          <div style="font-size:8px;color:#1e293b;margin-top:1px;">Ingestion</div>
+          <div style="margin-top:4px;background:#dcfce7;color:#166534;font-size:7px;padding:1px 5px;border-radius:8px;display:inline-block;">LIVE</div>
+        </div>
+        <div style="background:#f8fafc;border:1px solid #e2e8f0;border-radius:5px;padding:7px;opacity:0.6;">
+          <div style="font-size:8px;font-weight:700;color:#94a3b8;">BUILD 02</div>
+          <div style="font-size:8px;color:#94a3b8;margin-top:1px;">Sanitisation</div>
+          <div style="margin-top:4px;background:#f1f5f9;color:#94a3b8;font-size:7px;padding:1px 5px;border-radius:8px;display:inline-block;">QUEUED</div>
+        </div>
+        <div style="background:#f8fafc;border:1px solid #e2e8f0;border-radius:5px;padding:7px;opacity:0.6;">
+          <div style="font-size:8px;font-weight:700;color:#94a3b8;">BUILD 03</div>
+          <div style="font-size:8px;color:#94a3b8;margin-top:1px;">Identity</div>
+          <div style="margin-top:4px;background:#f1f5f9;color:#94a3b8;font-size:7px;padding:1px 5px;border-radius:8px;display:inline-block;">QUEUED</div>
+        </div>
+        <div style="background:#f8fafc;border:1px solid #e2e8f0;border-radius:5px;padding:7px;opacity:0.4;">
+          <div style="font-size:8px;font-weight:700;color:#94a3b8;">BUILD 04</div>
+          <div style="font-size:8px;color:#94a3b8;">RAG</div>
+        </div>
+        <div style="background:#f8fafc;border:1px solid #e2e8f0;border-radius:5px;padding:7px;opacity:0.4;">
+          <div style="font-size:8px;font-weight:700;color:#94a3b8;">BUILD 05</div>
+          <div style="font-size:8px;color:#94a3b8;">Self-Evolving</div>
+        </div>
+        <div style="background:#f8fafc;border:1px solid #e2e8f0;border-radius:5px;padding:7px;opacity:0.4;">
+          <div style="font-size:8px;font-weight:700;color:#94a3b8;">BUILD 06 ⭐</div>
+          <div style="font-size:8px;color:#94a3b8;">Council</div>
+        </div>
+        <div style="background:#f8fafc;border:1px solid #e2e8f0;border-radius:5px;padding:7px;opacity:0.3;">
+          <div style="font-size:8px;font-weight:700;color:#94a3b8;">BUILD 07</div>
+          <div style="font-size:8px;color:#94a3b8;">Compliance</div>
+        </div>
+        <div style="background:#f8fafc;border:1px solid #e2e8f0;border-radius:5px;padding:7px;opacity:0.3;">
+          <div style="font-size:8px;font-weight:700;color:#94a3b8;">BUILD 08</div>
+          <div style="font-size:8px;color:#94a3b8;">Synthesis</div>
+        </div>
+        <div style="background:#f8fafc;border:1px solid #e2e8f0;border-radius:5px;padding:7px;opacity:0.3;">
+          <div style="font-size:8px;font-weight:700;color:#94a3b8;">BUILD 09</div>
+          <div style="font-size:8px;color:#94a3b8;">Output</div>
+        </div>
+      </div>
+    </div>
+    <div class="card-body">
+      <h3>A — Grid + Progress Bar</h3>
+      <p>3×3 build grid at the bottom, master progress bar at top. Clean overview. Each completed build lights up with colour. Best for a quick "here's where I am" snapshot.</p>
+    </div>
+  </div>
+
+  <div class="card" data-choice="B" onclick="toggleSelect(this)">
+    <div class="card-image" style="background:#f8fafc;padding:14px;border-radius:6px;border:1px solid #e2e8f0;font-family:system-ui,sans-serif;">
+      <!-- Header -->
+      <div style="background:#fff;border:1px solid #e2e8f0;border-radius:6px;padding:8px 12px;margin-bottom:10px;display:flex;justify-content:space-between;align-items:center;">
+        <span style="font-size:10px;font-weight:700;color:#1e293b;">VAF AM Series</span>
+        <span style="font-size:10px;color:#64748b;">5-Day Build Sprint</span>
+      </div>
+      <!-- Kanban-style day columns -->
+      <div style="display:grid;grid-template-columns:1fr 1fr 1fr 1fr 1fr;gap:5px;">
+        <!-- MON -->
+        <div>
+          <div style="text-align:center;font-size:8px;font-weight:700;color:#1d4ed8;margin-bottom:5px;padding:3px;background:#dbeafe;border-radius:4px;">MON</div>
+          <div style="background:#fff;border:1px solid #1d4ed8;border-radius:5px;padding:6px;margin-bottom:4px;">
+            <div style="font-size:7px;font-weight:700;color:#1d4ed8;">01 Ingestion</div>
+            <div style="margin-top:3px;background:#dcfce7;color:#166534;font-size:6px;padding:1px 4px;border-radius:6px;display:inline-block;">✓ LIVE</div>
+          </div>
+          <div style="background:#f8fafc;border:1px solid #e2e8f0;border-radius:5px;padding:6px;opacity:0.6;">
+            <div style="font-size:7px;font-weight:700;color:#94a3b8;">02 Sanitise</div>
+            <div style="margin-top:3px;background:#f1f5f9;color:#94a3b8;font-size:6px;padding:1px 4px;border-radius:6px;display:inline-block;">QUEUED</div>
+          </div>
+        </div>
+        <!-- TUE -->
+        <div>
+          <div style="text-align:center;font-size:8px;font-weight:700;color:#94a3b8;margin-bottom:5px;padding:3px;background:#f1f5f9;border-radius:4px;">TUE</div>
+          <div style="background:#f8fafc;border:1px solid #e2e8f0;border-radius:5px;padding:6px;margin-bottom:4px;opacity:0.5;">
+            <div style="font-size:7px;font-weight:700;color:#94a3b8;">03 Identity</div>
+          </div>
+          <div style="background:#f8fafc;border:1px solid #e2e8f0;border-radius:5px;padding:6px;opacity:0.5;">
+            <div style="font-size:7px;font-weight:700;color:#94a3b8;">04 RAG</div>
+          </div>
+        </div>
+        <!-- WED -->
+        <div>
+          <div style="text-align:center;font-size:8px;font-weight:700;color:#94a3b8;margin-bottom:5px;padding:3px;background:#f1f5f9;border-radius:4px;">WED</div>
+          <div style="background:#f8fafc;border:1px solid #e2e8f0;border-radius:5px;padding:6px;margin-bottom:4px;opacity:0.3;">
+            <div style="font-size:7px;font-weight:700;color:#94a3b8;">05 Evolving</div>
+          </div>
+          <div style="background:#f8fafc;border:1px solid #fbbf24;border-radius:5px;padding:6px;opacity:0.3;">
+            <div style="font-size:7px;font-weight:700;color:#92400e;">06 Council ⭐</div>
+          </div>
+        </div>
+        <!-- THU -->
+        <div>
+          <div style="text-align:center;font-size:8px;font-weight:700;color:#94a3b8;margin-bottom:5px;padding:3px;background:#f1f5f9;border-radius:4px;">THU</div>
+          <div style="background:#f8fafc;border:1px solid #e2e8f0;border-radius:5px;padding:6px;margin-bottom:4px;opacity:0.2;">
+            <div style="font-size:7px;font-weight:700;color:#94a3b8;">07 Compliance</div>
+          </div>
+          <div style="background:#f8fafc;border:1px solid #e2e8f0;border-radius:5px;padding:6px;opacity:0.2;">
+            <div style="font-size:7px;font-weight:700;color:#94a3b8;">08 Synthesis</div>
+          </div>
+        </div>
+        <!-- FRI -->
+        <div>
+          <div style="text-align:center;font-size:8px;font-weight:700;color:#94a3b8;margin-bottom:5px;padding:3px;background:#f1f5f9;border-radius:4px;">FRI</div>
+          <div style="background:#f8fafc;border:1px solid #e2e8f0;border-radius:5px;padding:6px;opacity:0.2;">
+            <div style="font-size:7px;font-weight:700;color:#94a3b8;">09 Output</div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="card-body">
+      <h3>B — 5-Day Kanban</h3>
+      <p>One column per day (Mon–Fri), builds stacked inside. Shows the sprint narrative — "I'm doing 2 builds a day for 5 days." Great for communicating pace and discipline to LinkedIn audience.</p>
+    </div>
+  </div>
+
+  <div class="card" data-choice="C" onclick="toggleSelect(this)">
+    <div class="card-image" style="background:#f8fafc;padding:14px;border-radius:6px;border:1px solid #e2e8f0;font-family:system-ui,sans-serif;">
+      <!-- Header with big stat -->
+      <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;margin-bottom:10px;">
+        <div style="background:#fff;border:1px solid #e2e8f0;border-radius:6px;padding:8px;text-align:center;box-shadow:0 1px 3px rgba(0,0,0,0.06);">
+          <div style="font-size:20px;font-weight:800;color:#1d4ed8;">1</div>
+          <div style="font-size:8px;color:#64748b;">Builds Live</div>
+        </div>
+        <div style="background:#fff;border:1px solid #e2e8f0;border-radius:6px;padding:8px;text-align:center;box-shadow:0 1px 3px rgba(0,0,0,0.06);">
+          <div style="font-size:20px;font-weight:800;color:#f59e0b;">8</div>
+          <div style="font-size:8px;color:#64748b;">Queued</div>
+        </div>
+        <div style="background:#fff;border:1px solid #e2e8f0;border-radius:6px;padding:8px;text-align:center;box-shadow:0 1px 3px rgba(0,0,0,0.06);">
+          <div style="font-size:20px;font-weight:800;color:#8b5cf6;">5</div>
+          <div style="font-size:8px;color:#64748b;">Days</div>
+        </div>
+      </div>
+      <!-- Featured active build (big card) -->
+      <div style="background:#fff;border:2px solid #1d4ed8;border-radius:8px;padding:10px;margin-bottom:8px;box-shadow:0 2px 8px rgba(29,78,216,0.1);">
+        <div style="display:flex;justify-content:space-between;align-items:center;">
+          <div>
+            <div style="font-size:8px;color:#1d4ed8;font-weight:700;letter-spacing:1px;">CURRENT BUILD</div>
+            <div style="font-size:11px;font-weight:700;color:#1e293b;margin-top:2px;">Build 01 — Ingestion Pipeline</div>
+            <div style="font-size:8px;color:#64748b;margin-top:1px;">RSS · PDF · Web → SQLite · Claude AI</div>
+          </div>
+          <div style="background:#dcfce7;color:#166534;font-size:9px;padding:3px 8px;border-radius:10px;font-weight:700;">LIVE ↗</div>
+        </div>
+      </div>
+      <!-- Mini list of upcoming -->
+      <div style="display:flex;gap:4px;">
+        <div style="background:#f8fafc;border:1px solid #e2e8f0;border-radius:4px;padding:4px 6px;flex:1;opacity:0.6;">
+          <div style="font-size:7px;font-weight:700;color:#94a3b8;">02 Sanitise</div>
+        </div>
+        <div style="background:#f8fafc;border:1px solid #e2e8f0;border-radius:4px;padding:4px 6px;flex:1;opacity:0.5;">
+          <div style="font-size:7px;font-weight:700;color:#94a3b8;">03 Identity</div>
+        </div>
+        <div style="background:#f8fafc;border:1px solid #e2e8f0;border-radius:4px;padding:4px 6px;flex:1;opacity:0.4;">
+          <div style="font-size:7px;font-weight:700;color:#94a3b8;">04 RAG</div>
+        </div>
+        <div style="background:#f8fafc;border:1px solid #e2e8f0;border-radius:4px;padding:4px 6px;flex:1;opacity:0.3;">
+          <div style="font-size:7px;font-weight:700;color:#94a3b8;">+ 5 more</div>
+        </div>
+      </div>
+    </div>
+    <div class="card-body">
+      <h3>C — Hero + Pipeline</h3>
+      <p>Big stats at top, one large "Current Build" hero card in the centre (highlighted, with full detail), then a compact row of upcoming builds below. Focuses attention on what's live NOW. Best for demo walkthroughs.</p>
+    </div>
+  </div>
+
+</div>
+
+<p class="subtitle" style="margin-top:16px;">Click to select your preferred layout. This determines how all 9 builds are shown and how new ones "plug in" each day.</p>

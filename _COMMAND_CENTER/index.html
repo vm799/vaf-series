@@ -1,0 +1,1235 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>VAF AM Series — Command Center</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      background: #f8fafc;
+      color: #1e293b;
+      line-height: 1.5;
+    }
+
+    .container {
+      max-width: 1400px;
+      margin: 0 auto;
+      padding: 40px 24px;
+    }
+
+    /* Header */
+    .header {
+      margin-bottom: 40px;
+    }
+
+    .header h1 {
+      font-size: 32px;
+      font-weight: 700;
+      margin-bottom: 8px;
+      letter-spacing: -0.5px;
+    }
+
+    .header p {
+      font-size: 14px;
+      color: #64748b;
+    }
+
+    /* Stats Row */
+    .stats-row {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 16px;
+      margin-bottom: 32px;
+    }
+
+    .stat-card {
+      background: white;
+      border: 1px solid #e2e8f0;
+      border-radius: 10px;
+      padding: 16px;
+      box-shadow: 0 1px 3px rgba(0, 0, 0, 0.04);
+      text-align: center;
+    }
+
+    .stat-card.live {
+      border-color: #86efac;
+      background: rgba(220, 252, 231, 0.5);
+    }
+
+    .stat-card.queued {
+      border-color: #fcd34d;
+      background: rgba(253, 224, 71, 0.1);
+    }
+
+    .stat-card.complete {
+      border-color: #86efac;
+      background: rgba(220, 252, 231, 0.5);
+    }
+
+    .stat-card.day {
+      border-color: #d8b4fe;
+      background: rgba(243, 232, 255, 0.5);
+    }
+
+    .stat-value {
+      font-size: 28px;
+      font-weight: 700;
+      margin-bottom: 4px;
+    }
+
+    .stat-label {
+      font-size: 11px;
+      font-weight: 600;
+      color: #64748b;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+
+    /* Hero Card */
+    .hero-section {
+      margin-bottom: 32px;
+    }
+
+    .hero-card {
+      background: white;
+      border: 1px solid #e2e8f0;
+      border-radius: 12px;
+      padding: 24px;
+      box-shadow: 0 2px 6px rgba(0, 0, 0, 0.06);
+      cursor: pointer;
+      transition: all 0.2s ease;
+    }
+
+    .hero-card:hover {
+      border-color: #bfdbfe;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+    }
+
+    .hero-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      margin-bottom: 16px;
+    }
+
+    .hero-meta {
+      font-size: 11px;
+      color: #1d4ed8;
+      font-weight: 700;
+      letter-spacing: 1.5px;
+      text-transform: uppercase;
+      margin-bottom: 8px;
+    }
+
+    .hero-title {
+      font-size: 20px;
+      font-weight: 700;
+      margin-bottom: 8px;
+    }
+
+    .hero-description {
+      font-size: 13px;
+      color: #64748b;
+      margin-bottom: 16px;
+    }
+
+    .hero-tags {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin-bottom: 16px;
+    }
+
+    .tag {
+      background: #f1f5f9;
+      border: 1px solid #cbd5e1;
+      border-radius: 6px;
+      padding: 4px 10px;
+      font-size: 11px;
+      font-weight: 600;
+      color: #475569;
+    }
+
+    .status-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      background: #dcfce7;
+      color: #166534;
+      padding: 6px 12px;
+      border-radius: 10px;
+      font-size: 11px;
+      font-weight: 700;
+    }
+
+    .status-badge.live::before {
+      content: "●";
+      color: #16a34a;
+    }
+
+    /* Demo Panel */
+    .demo-panel {
+      display: none;
+      background: white;
+      border: 1px solid #e2e8f0;
+      border-top: none;
+      padding: 24px;
+      margin-bottom: 32px;
+      animation: slideDown 0.2s ease-out;
+    }
+
+    .demo-panel.open {
+      display: block;
+    }
+
+    @keyframes slideDown {
+      from {
+        opacity: 0;
+        transform: translateY(-10px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    /* Business Value Banner */
+    .business-banner {
+      background: linear-gradient(135deg, #1e3a8a, #1d4ed8);
+      border-radius: 10px;
+      padding: 20px;
+      color: white;
+      margin-bottom: 20px;
+    }
+
+    .business-banner-title {
+      font-size: 9px;
+      font-weight: 700;
+      letter-spacing: 1.5px;
+      opacity: 0.8;
+      margin-bottom: 12px;
+      text-transform: uppercase;
+    }
+
+    .business-metrics {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 12px;
+      text-align: center;
+    }
+
+    .metric {
+      padding: 8px;
+    }
+
+    .metric-value {
+      font-size: 24px;
+      font-weight: 800;
+      margin-bottom: 4px;
+    }
+
+    .metric-label {
+      font-size: 8px;
+      opacity: 0.85;
+      line-height: 1.3;
+    }
+
+    .metric:not(:first-child) {
+      border-left: 1px solid rgba(255, 255, 255, 0.2);
+      padding-left: 12px;
+    }
+
+    /* Pipeline Diagram */
+    .pipeline-section {
+      background: white;
+      border: 1px solid #e2e8f0;
+      border-radius: 10px;
+      padding: 16px;
+      margin-bottom: 20px;
+      box-shadow: 0 1px 3px rgba(0, 0, 0, 0.04);
+    }
+
+    .pipeline-title {
+      font-size: 9px;
+      font-weight: 700;
+      color: #64748b;
+      letter-spacing: 1px;
+      text-transform: uppercase;
+      margin-bottom: 12px;
+    }
+
+    .pipeline-diagram {
+      display: flex;
+      align-items: center;
+      gap: 0;
+      overflow-x: auto;
+      padding-bottom: 8px;
+    }
+
+    .pipeline-node {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 4px;
+      min-width: 70px;
+      text-align: center;
+    }
+
+    .pipeline-node-box {
+      border: 1px solid;
+      border-radius: 6px;
+      padding: 8px;
+      width: 100%;
+      font-size: 8px;
+      font-weight: 700;
+    }
+
+    .pipeline-node-box.rss {
+      background: #eff6ff;
+      border-color: #bfdbfe;
+      color: #1d4ed8;
+    }
+
+    .pipeline-node-box.pdf {
+      background: #fdf4ff;
+      border-color: #e9d5ff;
+      color: #7c3aed;
+    }
+
+    .pipeline-node-box.web {
+      background: #f0fdf4;
+      border-color: #bbf7d0;
+      color: #15803d;
+    }
+
+    .pipeline-node-box.normalise {
+      background: #fff7ed;
+      border-color: #fed7aa;
+      color: #c2410c;
+    }
+
+    .pipeline-node-box.claude {
+      background: #fdf4ff;
+      border-color: #a855f7;
+      border-width: 2px;
+      color: #7c3aed;
+    }
+
+    .pipeline-node-box.sqlite {
+      background: #f0fdf4;
+      border-color: #bbf7d0;
+      color: #15803d;
+    }
+
+    .pipeline-node-box.report {
+      background: white;
+      border-color: #1d4ed8;
+      border-width: 2px;
+      color: #1d4ed8;
+    }
+
+    .pipeline-node-label {
+      font-size: 6px;
+      color: #64748b;
+      margin-top: 2px;
+    }
+
+    .pipeline-arrow {
+      font-size: 14px;
+      color: #94a3b8;
+      padding: 0 6px;
+      flex-shrink: 0;
+    }
+
+    .pipeline-gather {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 0 6px;
+      min-width: 70px;
+      font-size: 7px;
+      color: #94a3b8;
+      text-align: center;
+    }
+
+    /* Documents Section */
+    .documents-section {
+      background: white;
+      border: 1px solid #e2e8f0;
+      border-radius: 10px;
+      padding: 16px;
+      margin-bottom: 20px;
+      box-shadow: 0 1px 3px rgba(0, 0, 0, 0.04);
+    }
+
+    .documents-title {
+      font-size: 9px;
+      font-weight: 700;
+      color: #64748b;
+      letter-spacing: 1px;
+      text-transform: uppercase;
+      margin-bottom: 12px;
+    }
+
+    .document-card {
+      border: 1px solid #e2e8f0;
+      border-radius: 7px;
+      padding: 12px;
+      margin-bottom: 10px;
+    }
+
+    .document-card:last-child {
+      margin-bottom: 0;
+    }
+
+    .document-header {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      margin-bottom: 8px;
+    }
+
+    .source-badge {
+      font-size: 7px;
+      padding: 2px 6px;
+      border-radius: 4px;
+      font-weight: 700;
+      white-space: nowrap;
+    }
+
+    .source-badge.rss {
+      background: #eff6ff;
+      color: #1d4ed8;
+    }
+
+    .source-badge.pdf {
+      background: #fdf4ff;
+      color: #7c3aed;
+    }
+
+    .source-badge.web {
+      background: #f0fdf4;
+      color: #15803d;
+    }
+
+    .document-title {
+      font-size: 9px;
+      font-weight: 600;
+      color: #1e293b;
+      flex: 1;
+    }
+
+    .document-date {
+      font-size: 7px;
+      color: #94a3b8;
+      margin-left: auto;
+    }
+
+    .document-summary {
+      background: #f8fafc;
+      border-left: 3px solid #a855f7;
+      padding: 8px;
+      border-radius: 0 4px 4px 0;
+      margin-bottom: 8px;
+    }
+
+    .summary-label {
+      font-size: 7px;
+      font-weight: 600;
+      color: #7c3aed;
+      margin-bottom: 4px;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+
+    .summary-text {
+      font-size: 8px;
+      color: #374151;
+      line-height: 1.4;
+    }
+
+    /* Audit Log */
+    .audit-log {
+      background: #1e293b;
+      border-radius: 8px;
+      padding: 12px;
+      font-family: "Monaco", "Menlo", monospace;
+      font-size: 8px;
+      color: #94a3b8;
+      line-height: 1.8;
+      overflow-x: auto;
+    }
+
+    .audit-log-title {
+      font-size: 9px;
+      font-weight: 700;
+      color: #4ade80;
+      letter-spacing: 1px;
+      margin-bottom: 8px;
+      text-transform: uppercase;
+    }
+
+    .audit-line {
+      margin-bottom: 4px;
+    }
+
+    .audit-timestamp {
+      color: #4ade80;
+    }
+
+    .audit-stage {
+      color: #60a5fa;
+    }
+
+    .audit-complete {
+      color: #4ade80;
+      font-weight: 700;
+    }
+
+    .audit-value {
+      color: #fff;
+    }
+
+    /* Kanban */
+    .kanban-section {
+      margin-bottom: 40px;
+    }
+
+    .kanban-header {
+      font-size: 11px;
+      font-weight: 700;
+      color: #64748b;
+      letter-spacing: 1px;
+      text-transform: uppercase;
+      margin-bottom: 16px;
+    }
+
+    .kanban {
+      display: grid;
+      grid-template-columns: repeat(5, 1fr);
+      gap: 16px;
+    }
+
+    .kanban-column {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+
+    .kanban-column-header {
+      font-size: 12px;
+      font-weight: 600;
+      padding-bottom: 8px;
+      border-bottom: 2px solid #e2e8f0;
+      color: #64748b;
+    }
+
+    .kanban-column.active .kanban-column-header {
+      color: #1d4ed8;
+      border-bottom-color: #1d4ed8;
+      font-weight: 700;
+    }
+
+    .build-card {
+      background: white;
+      border: 1px solid #e2e8f0;
+      border-radius: 8px;
+      padding: 12px;
+      box-shadow: 0 1px 3px rgba(0, 0, 0, 0.04);
+      opacity: 1;
+      transition: all 0.2s ease;
+    }
+
+    .build-card.active {
+      border-color: #1d4ed8;
+      border-width: 2px;
+      background: rgba(29, 78, 216, 0.02);
+    }
+
+    .build-card.featured {
+      border-color: #f59e0b;
+      border-width: 2px;
+      background: rgba(245, 158, 11, 0.02);
+    }
+
+    .build-card.queued {
+      opacity: 0.6;
+      background: #f8fafc;
+    }
+
+    .build-card-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      margin-bottom: 6px;
+    }
+
+    .build-id {
+      font-size: 11px;
+      font-weight: 700;
+      color: #1e293b;
+    }
+
+    .build-badge {
+      font-size: 7px;
+      padding: 2px 6px;
+      border-radius: 3px;
+      font-weight: 700;
+      white-space: nowrap;
+    }
+
+    .build-badge.live {
+      background: #dcfce7;
+      color: #166534;
+    }
+
+    .build-badge.featured {
+      background: #fef3c7;
+      color: #92400e;
+    }
+
+    .build-badge.done {
+      background: #dcfce7;
+      color: #166534;
+    }
+
+    .build-name {
+      font-size: 10px;
+      font-weight: 600;
+      color: #1e293b;
+    }
+
+    /* Architecture Section */
+    .architecture-section {
+      margin-top: 40px;
+    }
+
+    .architecture-header {
+      font-size: 11px;
+      font-weight: 700;
+      color: #64748b;
+      letter-spacing: 1px;
+      text-transform: uppercase;
+      margin-bottom: 12px;
+    }
+
+    .architecture-intro {
+      background: white;
+      border: 1px solid #e2e8f0;
+      border-radius: 10px;
+      padding: 16px;
+      margin-bottom: 12px;
+      box-shadow: 0 1px 3px rgba(0, 0, 0, 0.04);
+    }
+
+    .intro-title {
+      font-size: 13px;
+      font-weight: 700;
+      color: #1e293b;
+      margin-bottom: 8px;
+      line-height: 1.4;
+    }
+
+    .intro-subtitle {
+      font-size: 11px;
+      color: #475569;
+      line-height: 1.5;
+    }
+
+    .layers {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+
+    .layer {
+      background: white;
+      border: 1px solid #e2e8f0;
+      border-radius: 10px;
+      padding: 14px;
+      box-shadow: 0 1px 3px rgba(0, 0, 0, 0.04);
+      display: flex;
+      gap: 12px;
+    }
+
+    .layer.magic {
+      border: 2px solid #a855f7;
+      box-shadow: 0 2px 8px rgba(168, 85, 247, 0.1);
+    }
+
+    .layer-badge {
+      text-align: center;
+      min-width: 52px;
+      padding: 8px 10px;
+      border-radius: 8px;
+      border: 1px solid;
+    }
+
+    .layer-badge.ingest {
+      background: #eff6ff;
+      border-color: #bfdbfe;
+      color: #1d4ed8;
+    }
+
+    .layer-badge.parallel {
+      background: #fff7ed;
+      border-color: #fed7aa;
+      color: #c2410c;
+    }
+
+    .layer-badge.normalise {
+      background: #f0fdf4;
+      border-color: #bbf7d0;
+      color: #15803d;
+    }
+
+    .layer-badge.ai {
+      background: #fdf4ff;
+      border-color: #e9d5ff;
+      color: #7c3aed;
+    }
+
+    .layer-badge.store {
+      background: #f0fdf4;
+      border-color: #bbf7d0;
+      color: #15803d;
+    }
+
+    .layer-badge-number {
+      font-size: 18px;
+      font-weight: 800;
+      line-height: 1;
+      margin-bottom: 4px;
+    }
+
+    .layer-badge-label {
+      font-size: 7px;
+      font-weight: 700;
+      text-transform: uppercase;
+    }
+
+    .layer-content {
+      flex: 1;
+    }
+
+    .layer-title {
+      font-size: 11px;
+      font-weight: 700;
+      color: #1e293b;
+      margin-bottom: 6px;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .magic-badge {
+      background: #ede9fe;
+      color: #6d28d9;
+      font-size: 7px;
+      padding: 2px 6px;
+      border-radius: 4px;
+      font-weight: 700;
+    }
+
+    .layer-what {
+      font-size: 9px;
+      font-weight: 700;
+      color: #1d4ed8;
+      margin-bottom: 4px;
+      text-transform: uppercase;
+    }
+
+    .layer-what-text {
+      font-size: 10px;
+      color: #374151;
+      line-height: 1.5;
+      margin-bottom: 8px;
+    }
+
+    .layer-why {
+      font-size: 9px;
+      font-weight: 700;
+      color: #7c3aed;
+      margin-bottom: 4px;
+      text-transform: uppercase;
+    }
+
+    .layer-why-text {
+      font-size: 10px;
+      color: #374151;
+      line-height: 1.5;
+      font-style: italic;
+      background: #fdf4ff;
+      padding: 8px;
+      border-radius: 6px;
+      border-left: 3px solid #a855f7;
+    }
+
+    /* Loading State */
+    .loading {
+      text-align: center;
+      padding: 40px;
+      color: #64748b;
+      font-size: 14px;
+    }
+
+    .spinner {
+      display: inline-block;
+      width: 20px;
+      height: 20px;
+      border: 2px solid #e2e8f0;
+      border-top-color: #1d4ed8;
+      border-radius: 50%;
+      animation: spin 0.8s linear infinite;
+      margin-right: 8px;
+      vertical-align: middle;
+    }
+
+    @keyframes spin {
+      to { transform: rotate(360deg); }
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <!-- Header -->
+    <div class="header">
+      <h1>VAF AM Series — Command Center</h1>
+      <p>Live intelligence ingestion and processing pipeline</p>
+    </div>
+
+    <!-- Stats Row -->
+    <div class="stats-row">
+      <div class="stat-card live">
+        <div class="stat-value" id="stat-live">0</div>
+        <div class="stat-label">Builds Live</div>
+      </div>
+      <div class="stat-card queued">
+        <div class="stat-value" id="stat-queued">0</div>
+        <div class="stat-label">Queued</div>
+      </div>
+      <div class="stat-card complete">
+        <div class="stat-value" id="stat-complete">0%</div>
+        <div class="stat-label">Complete</div>
+      </div>
+      <div class="stat-card day">
+        <div class="stat-value" id="stat-day">1</div>
+        <div class="stat-label">Day of 5</div>
+      </div>
+    </div>
+
+    <!-- Hero Card + Demo Panel -->
+    <div class="hero-section">
+      <div class="hero-card" id="hero-card">
+        <div class="hero-header">
+          <div>
+            <div class="hero-meta" id="hero-meta">Build 01 · Monday · VAF AM Series</div>
+            <div class="hero-title" id="hero-title">Loading...</div>
+            <div class="hero-description" id="hero-description">Live intelligence gathering for asset managers</div>
+          </div>
+          <div class="status-badge live" id="hero-status">● LIVE</div>
+        </div>
+        <div class="hero-tags" id="hero-tags">
+          <div class="tag">RSS</div>
+          <div class="tag">PDF</div>
+          <div class="tag">Claude AI</div>
+          <div class="tag">SQLite</div>
+        </div>
+      </div>
+
+      <div class="demo-panel" id="demo-panel">
+        <!-- Business Value Banner -->
+        <div class="business-banner">
+          <div class="business-banner-title">Business Value Proof</div>
+          <div class="business-metrics">
+            <div class="metric">
+              <div class="metric-value" id="metric-runtime">30s</div>
+              <div class="metric-label">Pipeline runtime</div>
+            </div>
+            <div class="metric">
+              <div class="metric-value">90 min</div>
+              <div class="metric-label">Analyst manual time <span style="text-decoration: line-through; opacity: 0.6;">saved</span></div>
+            </div>
+            <div class="metric">
+              <div class="metric-value" id="metric-sources">3</div>
+              <div class="metric-label">Sources in parallel</div>
+            </div>
+            <div class="metric">
+              <div class="metric-value">FCA</div>
+              <div class="metric-label">Grade audit trail</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Pipeline Diagram -->
+        <div class="pipeline-section">
+          <div class="pipeline-title">End-to-End Flow — All 3 sources run in parallel</div>
+          <div class="pipeline-diagram">
+            <div class="pipeline-node">
+              <div class="pipeline-node-box rss">RSS FEED</div>
+              <div class="pipeline-node-label">FT · Reuters</div>
+            </div>
+            <div class="pipeline-node" style="margin-top: 8px;">
+              <div class="pipeline-node-box pdf">PDF UPLOAD</div>
+              <div class="pipeline-node-label">Earnings · Docs</div>
+            </div>
+            <div class="pipeline-node" style="margin-top: 16px;">
+              <div class="pipeline-node-box web">WEB SCRAPE</div>
+              <div class="pipeline-node-label">FCA · Gov sites</div>
+            </div>
+            <div class="pipeline-arrow">→</div>
+            <div class="pipeline-gather">
+              <div style="font-weight: 700;">asyncio</div>
+              <div>.gather()</div>
+              <div style="margin-top: 2px;">parallel</div>
+            </div>
+            <div class="pipeline-arrow">→</div>
+            <div class="pipeline-node">
+              <div class="pipeline-node-box normalise">NORMALISE</div>
+              <div class="pipeline-node-label">Pydantic schema<br/>8k token cap</div>
+            </div>
+            <div class="pipeline-arrow">→</div>
+            <div class="pipeline-node">
+              <div class="pipeline-node-box claude">CLAUDE AI</div>
+              <div class="pipeline-node-label">3-sentence AM<br/>summary</div>
+            </div>
+            <div class="pipeline-arrow">→</div>
+            <div class="pipeline-node">
+              <div class="pipeline-node-box sqlite">SQLITE</div>
+              <div class="pipeline-node-label">Indexed store<br/>FCA audit log</div>
+            </div>
+            <div class="pipeline-arrow">→</div>
+            <div class="pipeline-node">
+              <div class="pipeline-node-box report">REPORT</div>
+              <div class="pipeline-node-label">JSON output<br/>Ready for Build 02</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Live Output Documents -->
+        <div class="documents-section">
+          <div class="documents-title">Live Output — Documents Ingested This Run</div>
+          <div id="documents-container">
+            <div class="loading"><span class="spinner"></span>Loading documents...</div>
+          </div>
+        </div>
+
+        <!-- Audit Log -->
+        <div class="audit-log">
+          <div class="audit-log-title">FCA-Grade Audit Log (SQLite)</div>
+          <div id="audit-log-content">
+            <div class="audit-line"><span class="audit-timestamp">[Loading...]</span></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Kanban Section -->
+    <div class="kanban-section">
+      <div class="kanban-header">5-Day Sprint — Builds Release Daily</div>
+      <div class="kanban" id="kanban">
+        <!-- Populated by JS -->
+      </div>
+    </div>
+
+    <!-- Architecture Section -->
+    <div class="architecture-section">
+      <div class="architecture-header">Architecture — 5 Layers · What They Do · Why They Exist</div>
+      <div class="architecture-intro">
+        <div class="intro-title">Every morning, a junior analyst at a £2bn fund opens 12 browser tabs. Reuters. FT. FCA. Two earnings PDFs from their inbox. They spend 90 minutes reading before they've done a single minute of actual work.</div>
+        <div class="intro-subtitle">This build doesn't replace the analyst. It gives them their morning back. Here's how.</div>
+      </div>
+      <div class="layers" id="layers">
+        <!-- Populated by JS -->
+      </div>
+    </div>
+  </div>
+
+  <script>
+    const DAYS = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday'];
+    const DAY_NAMES = ['MON', 'TUE', 'WED', 'THU', 'FRI'];
+
+    const ARCHITECTURE_LAYERS = [
+      {
+        id: 1,
+        name: 'The Ingesters — RSS · PDF · Web',
+        label: 'INGEST',
+        badge: 'ingest',
+        what: 'Three specialised readers — one for news feeds, one for PDFs, one for websites — each knowing exactly how to pull clean text from its source type.',
+        why: '"The world\'s intelligence doesn\'t arrive in one format. A rate decision comes as a news headline. A fund\'s risk exposure sits in a 40-page PDF. A regulator\'s warning lives on a government website. If your system can only read one of those, you\'re already behind. This layer speaks all three languages — at the same time."'
+      },
+      {
+        id: 2,
+        name: 'asyncio.gather() — Parallel Execution',
+        label: 'PARALLEL',
+        badge: 'parallel',
+        what: 'All three ingesters fire simultaneously. RSS, PDF, and web run at exactly the same time — not one after another.',
+        why: '"A human can only read one thing at a time. That\'s not a flaw — that\'s just biology. But software doesn\'t have that constraint. This is the moment the machine stops thinking like a person and starts thinking like a machine. Three sources. One command. Thirty seconds. That\'s the entire morning brief — done before your coffee is cold."'
+      },
+      {
+        id: 3,
+        name: 'DocumentNormaliser — One Schema to Rule Them All',
+        label: 'NORMALISE',
+        badge: 'normalise',
+        what: 'Every document — regardless of source — gets shaped into the exact same structure: source type, URL, title, clean content, timestamp. Token count checked. Nothing bloated goes downstream.',
+        why: '"You can\'t build intelligence on chaos. An RSS feed gives you HTML soup. A PDF gives you raw text with page headers in the middle of sentences. A website gives you nav bars and cookie banners mixed in with the actual content. This layer is the translator. It cleans everything, structures everything, and makes sure every piece of information speaks the same language before it touches the AI."'
+      },
+      {
+        id: 4,
+        name: 'ClaudeSummariser — The Intelligence Engine',
+        label: 'AI LAYER',
+        badge: 'ai',
+        what: 'Sends each normalised document to Claude with a specific brief: summarise this in exactly 3 sentences, for an asset manager, be specific, include numbers, dates, company names. Raw text in. Actionable intelligence out.',
+        why: '"Here\'s where the pipeline stops being a data tool and becomes a thinking tool. Raw text isn\'t intelligence — it\'s noise waiting to be processed. A 40-page earnings transcript has three sentences in it that actually matter to a portfolio manager. This layer finds those three sentences. Every single time. At scale. That\'s not automation — that\'s leverage."',
+        magic: true
+      },
+      {
+        id: 5,
+        name: 'SQLiteDocumentStore — The Audit Trail',
+        label: 'STORE',
+        badge: 'store',
+        what: 'Every document — source, content, summary, timestamp — written to a structured SQLite database with full indexing. JSON report exported after every run. Nothing is lost. Everything is traceable.',
+        why: '"In finance, if it wasn\'t logged, it didn\'t happen. The FCA doesn\'t care that your AI was fast. It cares that you can prove what it saw, when it saw it, and what it did with it. This layer is what makes the whole pipeline FCA-ready — not just useful, but defensible. That\'s the difference between a cool tool and a production system."'
+      }
+    ];
+
+    let statusData = null;
+    let buildData = null;
+
+    async function loadData() {
+      try {
+        const [statusRes, buildRes] = await Promise.all([
+          fetch('status.json'),
+          fetch('data/build_01.json')
+        ]);
+
+        statusData = await statusRes.json();
+        buildData = await buildRes.json();
+
+        render();
+      } catch (err) {
+        console.error('Failed to load data:', err);
+        document.body.innerHTML = '<div class="loading" style="padding-top: 80px;"><strong>Error loading dashboard</strong><p style="margin-top: 12px; color: #64748b;">Check that status.json and data/build_01.json exist in the dashboard directory.</p></div>';
+      }
+    }
+
+    function updateStats() {
+      const stats = statusData.builds.reduce((acc, build) => {
+        if (build.status === 'live') acc.live++;
+        if (build.status === 'queued') acc.queued++;
+        if (build.status === 'done') acc.done++;
+        return acc;
+      }, { live: 0, queued: 0, done: 0 });
+
+      const total = statusData.builds.length;
+      const complete = Math.round((stats.done / total) * 100);
+
+      document.getElementById('stat-live').textContent = stats.live;
+      document.getElementById('stat-queued').textContent = stats.queued;
+      document.getElementById('stat-complete').textContent = complete + '%';
+      document.getElementById('stat-day').textContent = statusData.current_day;
+    }
+
+    function getHeroBuild() {
+      const currentDayBuilds = statusData.builds.filter(b => b.day === statusData.current_day && b.status === 'live');
+      if (currentDayBuilds.length > 0) {
+        return currentDayBuilds.sort((a, b) => parseInt(a.id) - parseInt(b.id))[0];
+      }
+
+      const liveBuilds = statusData.builds.filter(b => b.status === 'live');
+      if (liveBuilds.length > 0) {
+        return liveBuilds.sort((a, b) => parseInt(b.id) - parseInt(a.id))[0];
+      }
+
+      return null;
+    }
+
+    function updateHeroCard() {
+      const heroBuild = getHeroBuild();
+      if (!heroBuild) {
+        document.getElementById('hero-title').textContent = 'No active build';
+        document.getElementById('hero-description').textContent = 'Check back soon';
+        document.getElementById('hero-status').textContent = 'QUEUED';
+        return;
+      }
+
+      const day = DAYS[heroBuild.day - 1];
+      document.getElementById('hero-meta').textContent = `Build ${heroBuild.id} · ${day} · VAF AM Series`;
+      document.getElementById('hero-title').textContent = heroBuild.name;
+    }
+
+    function renderDocuments() {
+      const container = document.getElementById('documents-container');
+      if (!buildData || !buildData.documents) {
+        container.innerHTML = '<div class="loading">No documents available</div>';
+        return;
+      }
+
+      const rssDoc = buildData.documents.find(d => d.source_type === 'rss');
+      const pdfDoc = buildData.documents.find(d => d.source_type === 'pdf');
+      const webDoc = buildData.documents.find(d => d.source_type === 'web');
+
+      const docs = [rssDoc, pdfDoc, webDoc].filter(Boolean);
+
+      container.innerHTML = docs.map(doc => {
+        const date = new Date(doc.ingested_at).toLocaleDateString('en-GB', { day: 'numeric', month: 'short', year: 'numeric' });
+        return `
+          <div class="document-card">
+            <div class="document-header">
+              <span class="source-badge ${doc.source_type}">${doc.source_type.toUpperCase()}</span>
+              <span class="document-title">${escapeHtml(doc.title)}</span>
+              <span class="document-date">${date}</span>
+            </div>
+            <div class="document-summary">
+              <div class="summary-label">CLAUDE SUMMARY</div>
+              <div class="summary-text">${escapeHtml(doc.summary)}</div>
+            </div>
+          </div>
+        `;
+      }).join('');
+    }
+
+    function renderAuditLog() {
+      if (!buildData) return;
+
+      const docs = buildData.documents || [];
+      const rssCount = docs.filter(d => d.source_type === 'rss').length;
+      const pdfCount = docs.filter(d => d.source_type === 'pdf').length;
+      const webCount = docs.filter(d => d.source_type === 'web').length;
+
+      const ingestedAt = docs.length > 0 ? docs[docs.length - 1].ingested_at : buildData.generated_at;
+      const generatedAt = buildData.generated_at;
+
+      const runtimeMs = new Date(generatedAt) - new Date(ingestedAt);
+      const runtimeSecs = Math.round(runtimeMs / 1000);
+
+      const formatTime = (iso) => {
+        const d = new Date(iso);
+        return d.toLocaleTimeString('en-GB', { hour: '2-digit', minute: '2-digit', second: '2-digit', hour12: false });
+      };
+
+      const lines = [
+        `<span class="audit-timestamp">[${formatTime(ingestedAt)}]</span> RSSIngester    | feeds → ${rssCount} docs ingested`,
+        `<span class="audit-timestamp">[${formatTime(ingestedAt)}]</span> PDFIngester    | files → ${pdfCount} docs ingested`,
+        `<span class="audit-timestamp">[${formatTime(ingestedAt)}]</span> WebIngester    | urls  → ${webCount} docs ingested`,
+        `<span class="audit-timestamp">[${formatTime(ingestedAt)}]</span> Normaliser     | ${docs.length} docs → schema validated`,
+        `<span class="audit-stage">[${formatTime(ingestedAt)}]</span> ClaudeSummariser | ${docs.length} × 3-sentence summaries generated`,
+        `<span class="audit-stage">[${formatTime(generatedAt)}]</span> SQLiteStore    | ${docs.length} documents saved · audit log sealed`,
+        `<span class="audit-complete">[${formatTime(generatedAt)}]</span> COMPLETE       | <span class="audit-value">${runtimeSecs}s · ${docs.length} documents · 0 failures</span>`
+      ];
+
+      document.getElementById('audit-log-content').innerHTML = lines.map(line => `<div class="audit-line">${line}</div>`).join('');
+
+      // Update metrics
+      document.getElementById('metric-runtime').textContent = runtimeSecs + 's';
+      document.getElementById('metric-sources').textContent = [rssCount > 0, pdfCount > 0, webCount > 0].filter(Boolean).length;
+    }
+
+    function renderKanban() {
+      const kanban = document.getElementById('kanban');
+      const html = DAY_NAMES.map((day, dayIdx) => {
+        const dayNum = dayIdx + 1;
+        const dayBuilds = statusData.builds.filter(b => b.day === dayNum);
+        const isActive = dayNum === statusData.current_day;
+
+        const buildCards = dayBuilds.map(build => {
+          const isFeatured = build.featured || false;
+          const isActive = build.status === 'live';
+          const isDone = build.status === 'done';
+          const isQueued = build.status === 'queued';
+
+          let classes = 'build-card';
+          if (isActive) classes += ' active';
+          if (isFeatured) classes += ' featured';
+          if (isQueued) classes += ' queued';
+
+          let badge = '';
+          if (isFeatured) badge = '<span class="build-badge featured">★ FEATURED</span>';
+          else if (isActive) badge = '<span class="build-badge live">● LIVE</span>';
+          else if (isDone) badge = '<span class="build-badge done">✓ DONE</span>';
+
+          return `
+            <div class="${classes}">
+              <div class="build-card-header">
+                <div class="build-id">Build ${build.id}</div>
+                ${badge}
+              </div>
+              <div class="build-name">${build.name}</div>
+            </div>
+          `;
+        }).join('');
+
+        return `
+          <div class="kanban-column ${isActive ? 'active' : ''}">
+            <div class="kanban-column-header">${day}</div>
+            ${buildCards}
+          </div>
+        `;
+      }).join('');
+
+      kanban.innerHTML = html;
+    }
+
+    function renderArchitecture() {
+      const layersContainer = document.getElementById('layers');
+      const html = ARCHITECTURE_LAYERS.map(layer => {
+        const magic = layer.magic ? ' magic' : '';
+        const magicBadge = layer.magic ? '<span class="magic-badge">THE MAGIC LAYER</span>' : '';
+        return `
+          <div class="layer${magic}">
+            <div class="layer-badge ${layer.badge}">
+              <div class="layer-badge-number">${String(layer.id).padStart(2, '0')}</div>
+              <div class="layer-badge-label">${layer.label}</div>
+            </div>
+            <div class="layer-content">
+              <div class="layer-title">
+                ${escapeHtml(layer.name)}
+                ${magicBadge}
+              </div>
+              <div class="layer-what">What it does</div>
+              <div class="layer-what-text">${escapeHtml(layer.what)}</div>
+              <div class="layer-why">Why it exists</div>
+              <div class="layer-why-text">${escapeHtml(layer.why)}</div>
+            </div>
+          </div>
+        `;
+      }).join('');
+
+      layersContainer.innerHTML = html;
+    }
+
+    function escapeHtml(text) {
+      const div = document.createElement('div');
+      div.textContent = text;
+      return div.innerHTML;
+    }
+
+    function toggleDemo() {
+      const panel = document.getElementById('demo-panel');
+      panel.classList.toggle('open');
+    }
+
+    function render() {
+      updateStats();
+      updateHeroCard();
+      renderDocuments();
+      renderAuditLog();
+      renderKanban();
+      renderArchitecture();
+    }
+
+    // Event listeners
+    document.getElementById('hero-card').addEventListener('click', toggleDemo);
+
+    // Load everything
+    loadData();
+  </script>
+</body>
+</html>

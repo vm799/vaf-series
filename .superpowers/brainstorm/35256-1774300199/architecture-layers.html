@@ -1,0 +1,121 @@
+<h2>Architecture Layers — The What & Why</h2>
+<p class="subtitle">Written in Jake van Clief's storytelling style. Each layer gets a hook, a what, and a why. Approve the voice — then we lock it into the dashboard.</p>
+
+<div class="mockup">
+  <div class="mockup-header">Build 01 Architecture — as it appears in the Command Center</div>
+  <div class="mockup-body" style="background:#f1f5f9;padding:16px;font-family:system-ui,sans-serif;">
+
+    <!-- Section header -->
+    <div style="margin-bottom:14px;">
+      <div style="font-size:9px;font-weight:700;color:#64748b;letter-spacing:1.5px;text-transform:uppercase;margin-bottom:4px;">Architecture — 5 Layers · What They Do · Why They Exist</div>
+      <div style="font-size:13px;font-weight:700;color:#1e293b;">Every morning, a junior analyst at a £2bn fund opens 12 browser tabs. Reuters. FT. FCA. Two earnings PDFs from their inbox. They spend 90 minutes reading before they've done a single minute of actual work.</div>
+      <div style="font-size:11px;color:#475569;margin-top:6px;line-height:1.6;">This build doesn't replace the analyst. It gives them their morning back. Here's how.</div>
+    </div>
+
+    <!-- Layer 1 -->
+    <div style="background:#fff;border:1px solid #e2e8f0;border-radius:10px;padding:14px;margin-bottom:10px;box-shadow:0 1px 4px rgba(0,0,0,0.04);">
+      <div style="display:flex;gap:12px;align-items:flex-start;">
+        <div style="background:#eff6ff;border:1px solid #bfdbfe;border-radius:8px;padding:8px 10px;text-align:center;min-width:52px;">
+          <div style="font-size:18px;font-weight:800;color:#1d4ed8;line-height:1;">01</div>
+          <div style="font-size:7px;color:#1d4ed8;font-weight:700;margin-top:2px;">INGEST</div>
+        </div>
+        <div style="flex:1;">
+          <div style="font-size:11px;font-weight:700;color:#1e293b;margin-bottom:3px;">The Ingesters — RSS · PDF · Web</div>
+          <div style="font-size:9px;font-weight:700;color:#1d4ed8;margin-bottom:4px;">WHAT IT DOES</div>
+          <div style="font-size:10px;color:#374151;line-height:1.6;margin-bottom:8px;">Three specialised readers — one for news feeds, one for PDFs, one for websites — each knowing exactly how to pull clean text from its source type.</div>
+          <div style="font-size:9px;font-weight:700;color:#7c3aed;margin-bottom:4px;">WHY IT EXISTS</div>
+          <div style="font-size:10px;color:#374151;line-height:1.6;font-style:italic;background:#fdf4ff;padding:8px;border-radius:6px;border-left:3px solid #a855f7;">"The world's intelligence doesn't arrive in one format. A rate decision comes as a news headline. A fund's risk exposure sits in a 40-page PDF. A regulator's warning lives on a government website. If your system can only read one of those, you're already behind. This layer speaks all three languages — at the same time."</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Layer 2 -->
+    <div style="background:#fff;border:1px solid #e2e8f0;border-radius:10px;padding:14px;margin-bottom:10px;box-shadow:0 1px 4px rgba(0,0,0,0.04);">
+      <div style="display:flex;gap:12px;align-items:flex-start;">
+        <div style="background:#fff7ed;border:1px solid #fed7aa;border-radius:8px;padding:8px 10px;text-align:center;min-width:52px;">
+          <div style="font-size:18px;font-weight:800;color:#c2410c;line-height:1;">02</div>
+          <div style="font-size:7px;color:#c2410c;font-weight:700;margin-top:2px;">PARALLEL</div>
+        </div>
+        <div style="flex:1;">
+          <div style="font-size:11px;font-weight:700;color:#1e293b;margin-bottom:3px;">asyncio.gather() — Parallel Execution</div>
+          <div style="font-size:9px;font-weight:700;color:#1d4ed8;margin-bottom:4px;">WHAT IT DOES</div>
+          <div style="font-size:10px;color:#374151;line-height:1.6;margin-bottom:8px;">All three ingesters fire simultaneously. RSS, PDF, and web run at exactly the same time — not one after another.</div>
+          <div style="font-size:9px;font-weight:700;color:#7c3aed;margin-bottom:4px;">WHY IT EXISTS</div>
+          <div style="font-size:10px;color:#374151;line-height:1.6;font-style:italic;background:#fdf4ff;padding:8px;border-radius:6px;border-left:3px solid #a855f7;">"A human can only read one thing at a time. That's not a flaw — that's just biology. But software doesn't have that constraint. This is the moment the machine stops thinking like a person and starts thinking like a machine. Three sources. One command. Thirty seconds. That's the entire morning brief — done before your coffee is cold."</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Layer 3 -->
+    <div style="background:#fff;border:1px solid #e2e8f0;border-radius:10px;padding:14px;margin-bottom:10px;box-shadow:0 1px 4px rgba(0,0,0,0.04);">
+      <div style="display:flex;gap:12px;align-items:flex-start;">
+        <div style="background:#f0fdf4;border:1px solid #bbf7d0;border-radius:8px;padding:8px 10px;text-align:center;min-width:52px;">
+          <div style="font-size:18px;font-weight:800;color:#15803d;line-height:1;">03</div>
+          <div style="font-size:7px;color:#15803d;font-weight:700;margin-top:2px;">NORMALISE</div>
+        </div>
+        <div style="flex:1;">
+          <div style="font-size:11px;font-weight:700;color:#1e293b;margin-bottom:3px;">DocumentNormaliser — One Schema to Rule Them All</div>
+          <div style="font-size:9px;font-weight:700;color:#1d4ed8;margin-bottom:4px;">WHAT IT DOES</div>
+          <div style="font-size:10px;color:#374151;line-height:1.6;margin-bottom:8px;">Every document — regardless of source — gets shaped into the exact same structure: source type, URL, title, clean content, timestamp. Token count checked. Nothing bloated goes downstream.</div>
+          <div style="font-size:9px;font-weight:700;color:#7c3aed;margin-bottom:4px;">WHY IT EXISTS</div>
+          <div style="font-size:10px;color:#374151;line-height:1.6;font-style:italic;background:#fdf4ff;padding:8px;border-radius:6px;border-left:3px solid #a855f7;">"You can't build intelligence on chaos. An RSS feed gives you HTML soup. A PDF gives you raw text with page headers in the middle of sentences. A website gives you nav bars and cookie banners mixed in with the actual content. This layer is the translator. It cleans everything, structures everything, and makes sure every piece of information speaks the same language before it touches the AI."</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Layer 4 -->
+    <div style="background:#fff;border:2px solid #a855f7;border-radius:10px;padding:14px;margin-bottom:10px;box-shadow:0 2px 8px rgba(168,85,247,0.1);">
+      <div style="display:flex;gap:12px;align-items:flex-start;">
+        <div style="background:#fdf4ff;border:1px solid #e9d5ff;border-radius:8px;padding:8px 10px;text-align:center;min-width:52px;">
+          <div style="font-size:18px;font-weight:800;color:#7c3aed;line-height:1;">04</div>
+          <div style="font-size:7px;color:#7c3aed;font-weight:700;margin-top:2px;">AI LAYER</div>
+        </div>
+        <div style="flex:1;">
+          <div style="display:flex;align-items:center;gap:6px;margin-bottom:3px;">
+            <div style="font-size:11px;font-weight:700;color:#1e293b;">ClaudeSummariser — The Intelligence Engine</div>
+            <span style="background:#ede9fe;color:#6d28d9;font-size:7px;padding:2px 6px;border-radius:4px;font-weight:700;">THE MAGIC LAYER</span>
+          </div>
+          <div style="font-size:9px;font-weight:700;color:#1d4ed8;margin-bottom:4px;">WHAT IT DOES</div>
+          <div style="font-size:10px;color:#374151;line-height:1.6;margin-bottom:8px;">Sends each normalised document to Claude with a specific brief: summarise this in exactly 3 sentences, for an asset manager, be specific, include numbers, dates, company names. Raw text in. Actionable intelligence out.</div>
+          <div style="font-size:9px;font-weight:700;color:#7c3aed;margin-bottom:4px;">WHY IT EXISTS</div>
+          <div style="font-size:10px;color:#374151;line-height:1.6;font-style:italic;background:#fdf4ff;padding:8px;border-radius:6px;border-left:3px solid #a855f7;">"Here's where the pipeline stops being a data tool and becomes a thinking tool. Raw text isn't intelligence — it's noise waiting to be processed. A 40-page earnings transcript has three sentences in it that actually matter to a portfolio manager. This layer finds those three sentences. Every single time. At scale. That's not automation — that's leverage."</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Layer 5 -->
+    <div style="background:#fff;border:1px solid #e2e8f0;border-radius:10px;padding:14px;box-shadow:0 1px 4px rgba(0,0,0,0.04);">
+      <div style="display:flex;gap:12px;align-items:flex-start;">
+        <div style="background:#f0fdf4;border:1px solid #bbf7d0;border-radius:8px;padding:8px 10px;text-align:center;min-width:52px;">
+          <div style="font-size:18px;font-weight:800;color:#15803d;line-height:1;">05</div>
+          <div style="font-size:7px;color:#15803d;font-weight:700;margin-top:2px;">STORE</div>
+        </div>
+        <div style="flex:1;">
+          <div style="font-size:11px;font-weight:700;color:#1e293b;margin-bottom:3px;">SQLiteDocumentStore — The Audit Trail</div>
+          <div style="font-size:9px;font-weight:700;color:#1d4ed8;margin-bottom:4px;">WHAT IT DOES</div>
+          <div style="font-size:10px;color:#374151;line-height:1.6;margin-bottom:8px;">Every document — source, content, summary, timestamp — written to a structured SQLite database with full indexing. JSON report exported after every run. Nothing is lost. Everything is traceable.</div>
+          <div style="font-size:9px;font-weight:700;color:#7c3aed;margin-bottom:4px;">WHY IT EXISTS</div>
+          <div style="font-size:10px;color:#374151;line-height:1.6;font-style:italic;background:#fdf4ff;padding:8px;border-radius:6px;border-left:3px solid #a855f7;">"In finance, if it wasn't logged, it didn't happen. The FCA doesn't care that your AI was fast. It cares that you can prove what it saw, when it saw it, and what it did with it. This layer is what makes the whole pipeline FCA-ready — not just useful, but defensible. That's the difference between a cool tool and a production system."</div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<div class="options" style="margin-top:14px;">
+  <div class="option" data-choice="voice-yes" onclick="toggleSelect(this)">
+    <div class="letter">✓</div>
+    <div class="content">
+      <h3>Voice is right — lock it in</h3>
+      <p>Storytelling, direct, business-first, teaches without lecturing. This goes in the dashboard.</p>
+    </div>
+  </div>
+  <div class="option" data-choice="voice-tweak" onclick="toggleSelect(this)">
+    <div class="letter">✎</div>
+    <div class="content">
+      <h3>Adjust the voice</h3>
+      <p>Tell me in the terminal — punchier? longer? different energy?</p>
+    </div>
+  </div>
+</div>

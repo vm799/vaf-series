@@ -1,0 +1,158 @@
+<h2>Combined Layout — Hero + Kanban</h2>
+<p class="subtitle">Hero card shifts to highlight the current day's active build. Kanban shows the full 5-day sprint below. Two views in one.</p>
+
+<div class="mockup">
+  <div class="mockup-header">Day 1 (Monday) — Build 01 Live</div>
+  <div class="mockup-body" style="background:#f1f5f9;padding:14px;font-family:system-ui,sans-serif;">
+
+    <!-- TOP: Stats row -->
+    <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin-bottom:12px;">
+      <div style="background:#fff;border:1px solid #e2e8f0;border-radius:8px;padding:10px;text-align:center;box-shadow:0 1px 3px rgba(0,0,0,0.06);">
+        <div style="font-size:22px;font-weight:800;color:#1d4ed8;line-height:1;">1</div>
+        <div style="font-size:9px;color:#64748b;margin-top:2px;text-transform:uppercase;letter-spacing:0.5px;">Builds Live</div>
+      </div>
+      <div style="background:#fff;border:1px solid #e2e8f0;border-radius:8px;padding:10px;text-align:center;box-shadow:0 1px 3px rgba(0,0,0,0.06);">
+        <div style="font-size:22px;font-weight:800;color:#f59e0b;line-height:1;">8</div>
+        <div style="font-size:9px;color:#64748b;margin-top:2px;text-transform:uppercase;letter-spacing:0.5px;">Queued</div>
+      </div>
+      <div style="background:#fff;border:1px solid #e2e8f0;border-radius:8px;padding:10px;text-align:center;box-shadow:0 1px 3px rgba(0,0,0,0.06);">
+        <div style="font-size:22px;font-weight:800;color:#10b981;line-height:1;">11%</div>
+        <div style="font-size:9px;color:#64748b;margin-top:2px;text-transform:uppercase;letter-spacing:0.5px;">Complete</div>
+      </div>
+      <div style="background:#fff;border:1px solid #e2e8f0;border-radius:8px;padding:10px;text-align:center;box-shadow:0 1px 3px rgba(0,0,0,0.06);">
+        <div style="font-size:22px;font-weight:800;color:#8b5cf6;line-height:1;">Day 1</div>
+        <div style="font-size:9px;color:#64748b;margin-top:2px;text-transform:uppercase;letter-spacing:0.5px;">of 5</div>
+      </div>
+    </div>
+
+    <!-- HERO: Active build card (shifts each day) -->
+    <div style="background:#fff;border:2px solid #1d4ed8;border-radius:10px;padding:14px;margin-bottom:12px;box-shadow:0 4px 14px rgba(29,78,216,0.12);">
+      <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:8px;">
+        <div>
+          <div style="font-size:9px;color:#1d4ed8;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;">Monday · Active Build</div>
+          <div style="font-size:15px;font-weight:800;color:#1e293b;margin-top:3px;">Build 01 — Multi-Source Ingestion</div>
+          <div style="font-size:10px;color:#64748b;margin-top:2px;">FT RSS · Earnings PDF · FCA Web → SQLite → Claude AI summary</div>
+        </div>
+        <div style="text-align:right;">
+          <div style="background:#dcfce7;color:#166534;font-size:9px;padding:4px 10px;border-radius:10px;font-weight:700;display:inline-block;">● LIVE</div>
+          <div style="font-size:8px;color:#94a3b8;margin-top:4px;">~2 hours to build</div>
+        </div>
+      </div>
+      <div style="display:flex;gap:6px;margin-bottom:8px;">
+        <span style="background:#dbeafe;color:#1d4ed8;font-size:8px;padding:2px 8px;border-radius:6px;font-weight:600;">RSS</span>
+        <span style="background:#dbeafe;color:#1d4ed8;font-size:8px;padding:2px 8px;border-radius:6px;font-weight:600;">PDF</span>
+        <span style="background:#dbeafe;color:#1d4ed8;font-size:8px;padding:2px 8px;border-radius:6px;font-weight:600;">WEB</span>
+        <span style="background:#ede9fe;color:#6d28d9;font-size:8px;padding:2px 8px;border-radius:6px;font-weight:600;">Claude AI</span>
+        <span style="background:#f0fdf4;color:#166534;font-size:8px;padding:2px 8px;border-radius:6px;font-weight:600;">SQLite</span>
+        <span style="background:#fef9c3;color:#854d0e;font-size:8px;padding:2px 8px;border-radius:6px;font-weight:600;">FCA Audit</span>
+      </div>
+      <!-- Pain point solved -->
+      <div style="background:#f8fafc;border-left:3px solid #1d4ed8;border-radius:0 6px 6px 0;padding:7px 10px;">
+        <div style="font-size:9px;font-weight:600;color:#1e293b;">Pain solved:</div>
+        <div style="font-size:9px;color:#64748b;margin-top:1px;">Analysts spend 60–70% of their day gathering data. This does it in 30 seconds.</div>
+      </div>
+    </div>
+
+    <!-- KANBAN: 5-day columns -->
+    <div style="display:grid;grid-template-columns:repeat(5,1fr);gap:8px;">
+
+      <!-- MON — active -->
+      <div>
+        <div style="background:#1d4ed8;color:#fff;text-align:center;font-size:9px;font-weight:700;padding:5px;border-radius:6px;margin-bottom:6px;">MON</div>
+        <div style="background:#fff;border:2px solid #1d4ed8;border-radius:7px;padding:8px;margin-bottom:5px;box-shadow:0 2px 6px rgba(29,78,216,0.1);">
+          <div style="font-size:8px;font-weight:700;color:#1d4ed8;">01 · Ingestion</div>
+          <div style="font-size:7px;color:#64748b;margin-top:2px;">RSS+PDF+Web→SQLite</div>
+          <div style="margin-top:5px;display:flex;align-items:center;gap:3px;">
+            <div style="width:5px;height:5px;border-radius:50%;background:#10b981;"></div>
+            <span style="font-size:7px;color:#166534;font-weight:600;">LIVE</span>
+          </div>
+        </div>
+        <div style="background:#fff;border:1px solid #e2e8f0;border-radius:7px;padding:8px;opacity:0.75;">
+          <div style="font-size:8px;font-weight:700;color:#475569;">02 · Sanitisation</div>
+          <div style="font-size:7px;color:#94a3b8;margin-top:2px;">PII · injection · audit</div>
+          <div style="margin-top:5px;">
+            <span style="background:#f1f5f9;color:#94a3b8;font-size:7px;padding:1px 5px;border-radius:6px;">QUEUED</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- TUE -->
+      <div>
+        <div style="background:#e2e8f0;color:#64748b;text-align:center;font-size:9px;font-weight:700;padding:5px;border-radius:6px;margin-bottom:6px;">TUE</div>
+        <div style="background:#fff;border:1px solid #e2e8f0;border-radius:7px;padding:8px;margin-bottom:5px;opacity:0.55;">
+          <div style="font-size:8px;font-weight:700;color:#64748b;">03 · Identity</div>
+          <div style="font-size:7px;color:#94a3b8;margin-top:2px;">Entity resolution</div>
+          <div style="margin-top:5px;"><span style="background:#f1f5f9;color:#94a3b8;font-size:7px;padding:1px 5px;border-radius:6px;">QUEUED</span></div>
+        </div>
+        <div style="background:#fff;border:1px solid #e2e8f0;border-radius:7px;padding:8px;opacity:0.55;">
+          <div style="font-size:8px;font-weight:700;color:#64748b;">04 · RAG</div>
+          <div style="font-size:7px;color:#94a3b8;margin-top:2px;">Semantic search</div>
+          <div style="margin-top:5px;"><span style="background:#f1f5f9;color:#94a3b8;font-size:7px;padding:1px 5px;border-radius:6px;">QUEUED</span></div>
+        </div>
+      </div>
+
+      <!-- WED -->
+      <div>
+        <div style="background:#e2e8f0;color:#64748b;text-align:center;font-size:9px;font-weight:700;padding:5px;border-radius:6px;margin-bottom:6px;">WED</div>
+        <div style="background:#fff;border:1px solid #e2e8f0;border-radius:7px;padding:8px;margin-bottom:5px;opacity:0.4;">
+          <div style="font-size:8px;font-weight:700;color:#64748b;">05 · Self-Evolving</div>
+          <div style="font-size:7px;color:#94a3b8;margin-top:2px;">Adaptive agent</div>
+          <div style="margin-top:5px;"><span style="background:#f1f5f9;color:#94a3b8;font-size:7px;padding:1px 5px;border-radius:6px;">QUEUED</span></div>
+        </div>
+        <div style="background:#fff;border:1px solid #fbbf24;border-radius:7px;padding:8px;opacity:0.4;">
+          <div style="font-size:8px;font-weight:700;color:#92400e;">06 · Council ⭐</div>
+          <div style="font-size:7px;color:#b45309;margin-top:2px;">Multi-agent showpiece</div>
+          <div style="margin-top:5px;"><span style="background:#fef9c3;color:#854d0e;font-size:7px;padding:1px 5px;border-radius:6px;">FEATURED</span></div>
+        </div>
+      </div>
+
+      <!-- THU -->
+      <div>
+        <div style="background:#e2e8f0;color:#64748b;text-align:center;font-size:9px;font-weight:700;padding:5px;border-radius:6px;margin-bottom:6px;">THU</div>
+        <div style="background:#fff;border:1px solid #e2e8f0;border-radius:7px;padding:8px;margin-bottom:5px;opacity:0.3;">
+          <div style="font-size:8px;font-weight:700;color:#64748b;">07 · Compliance</div>
+          <div style="font-size:7px;color:#94a3b8;margin-top:2px;">FCA violation check</div>
+          <div style="margin-top:5px;"><span style="background:#f1f5f9;color:#94a3b8;font-size:7px;padding:1px 5px;border-radius:6px;">QUEUED</span></div>
+        </div>
+        <div style="background:#fff;border:1px solid #e2e8f0;border-radius:7px;padding:8px;opacity:0.3;">
+          <div style="font-size:8px;font-weight:700;color:#64748b;">08 · Synthesis</div>
+          <div style="font-size:7px;color:#94a3b8;margin-top:2px;">PM brief generation</div>
+          <div style="margin-top:5px;"><span style="background:#f1f5f9;color:#94a3b8;font-size:7px;padding:1px 5px;border-radius:6px;">QUEUED</span></div>
+        </div>
+      </div>
+
+      <!-- FRI -->
+      <div>
+        <div style="background:#e2e8f0;color:#64748b;text-align:center;font-size:9px;font-weight:700;padding:5px;border-radius:6px;margin-bottom:6px;">FRI</div>
+        <div style="background:#fff;border:1px solid #e2e8f0;border-radius:7px;padding:8px;opacity:0.25;">
+          <div style="font-size:8px;font-weight:700;color:#64748b;">09 · Output</div>
+          <div style="font-size:7px;color:#94a3b8;margin-top:2px;">Full pipeline delivery</div>
+          <div style="margin-top:5px;"><span style="background:#f1f5f9;color:#94a3b8;font-size:7px;padding:1px 5px;border-radius:6px;">QUEUED</span></div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+<div class="section" style="margin-top:16px;">
+  <h3>How it shifts each day</h3>
+  <p class="subtitle">The hero card updates automatically based on which builds are active. Monday highlights Build 01+02 (both blue). Tuesday shifts to Build 03+04 as the active day. The kanban column heading goes bold + blue as the day activates. Completed builds show a green checkmark and stay visible — they don't disappear, they become "done" entries in the kanban.</p>
+</div>
+
+<div class="options" style="margin-top:12px;">
+  <div class="option" data-choice="yes" onclick="toggleSelect(this)">
+    <div class="letter">✓</div>
+    <div class="content">
+      <h3>This is it — build this</h3>
+      <p>Combined hero + kanban. Hero shifts per active day. Build this as the command center.</p>
+    </div>
+  </div>
+  <div class="option" data-choice="tweak" onclick="toggleSelect(this)">
+    <div class="letter">✎</div>
+    <div class="content">
+      <h3>Right direction, I want tweaks</h3>
+      <p>Close but something needs adjusting — tell me what to change in the terminal.</p>
+    </div>
+  </div>
+</div>

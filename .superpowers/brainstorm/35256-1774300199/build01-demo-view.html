@@ -1,0 +1,188 @@
+<h2>Build 01 — Demo View Inside the Dashboard</h2>
+<p class="subtitle">When you click into Build 01 on the Command Center, this is what the audience sees. Real data, real flow, real proof.</p>
+
+<div class="mockup">
+  <div class="mockup-header">Build 01 — Expanded Demo Panel (what loads when you click the hero card)</div>
+  <div class="mockup-body" style="background:#f1f5f9;padding:16px;font-family:system-ui,sans-serif;">
+
+    <!-- Build header -->
+    <div style="background:#fff;border:1px solid #e2e8f0;border-radius:10px;padding:14px;margin-bottom:12px;box-shadow:0 1px 4px rgba(0,0,0,0.06);">
+      <div style="display:flex;justify-content:space-between;align-items:flex-start;">
+        <div>
+          <div style="font-size:9px;color:#1d4ed8;font-weight:700;letter-spacing:1.5px;">BUILD 01 · MONDAY · VAF AM SERIES</div>
+          <div style="font-size:17px;font-weight:800;color:#1e293b;margin-top:3px;">Multi-Source Data Ingestion</div>
+          <div style="font-size:10px;color:#64748b;margin-top:2px;">Automated intelligence gathering for asset managers</div>
+        </div>
+        <div style="background:#dcfce7;color:#166534;font-size:9px;padding:5px 12px;border-radius:10px;font-weight:700;">● LIVE</div>
+      </div>
+    </div>
+
+    <!-- Business value banner -->
+    <div style="background:linear-gradient(135deg,#1e3a8a,#1d4ed8);border-radius:10px;padding:14px;margin-bottom:12px;color:#fff;">
+      <div style="font-size:9px;font-weight:700;letter-spacing:1.5px;opacity:0.7;margin-bottom:8px;">BUSINESS VALUE PROOF</div>
+      <div style="display:grid;grid-template-columns:1fr 1fr 1fr 1fr;gap:10px;text-align:center;">
+        <div>
+          <div style="font-size:22px;font-weight:800;">30s</div>
+          <div style="font-size:8px;opacity:0.8;margin-top:2px;">Pipeline runtime</div>
+        </div>
+        <div style="border-left:1px solid rgba(255,255,255,0.2);padding-left:10px;">
+          <div style="font-size:22px;font-weight:800;">90 min</div>
+          <div style="font-size:8px;opacity:0.8;margin-top:2px;">Analyst manual time <span style="text-decoration:line-through;opacity:0.6;">saved</span></div>
+        </div>
+        <div style="border-left:1px solid rgba(255,255,255,0.2);padding-left:10px;">
+          <div style="font-size:22px;font-weight:800;">3</div>
+          <div style="font-size:8px;opacity:0.8;margin-top:2px;">Sources in parallel</div>
+        </div>
+        <div style="border-left:1px solid rgba(255,255,255,0.2);padding-left:10px;">
+          <div style="font-size:22px;font-weight:800;">FCA</div>
+          <div style="font-size:8px;opacity:0.8;margin-top:2px;">Grade audit trail</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- E2E Pipeline flow -->
+    <div style="background:#fff;border:1px solid #e2e8f0;border-radius:10px;padding:14px;margin-bottom:12px;box-shadow:0 1px 4px rgba(0,0,0,0.06);">
+      <div style="font-size:9px;font-weight:700;color:#64748b;letter-spacing:1px;text-transform:uppercase;margin-bottom:10px;">End-to-End Flow — All 3 sources run in parallel</div>
+
+      <!-- Flow diagram -->
+      <div style="display:flex;align-items:center;gap:0;overflow-x:auto;">
+
+        <!-- INPUTS stacked -->
+        <div style="display:flex;flex-direction:column;gap:4px;min-width:90px;">
+          <div style="background:#eff6ff;border:1px solid #bfdbfe;border-radius:6px;padding:6px 8px;text-align:center;">
+            <div style="font-size:8px;font-weight:700;color:#1d4ed8;">RSS FEED</div>
+            <div style="font-size:7px;color:#64748b;margin-top:1px;">FT · Reuters</div>
+          </div>
+          <div style="background:#fdf4ff;border:1px solid #e9d5ff;border-radius:6px;padding:6px 8px;text-align:center;">
+            <div style="font-size:8px;font-weight:700;color:#7c3aed;">PDF UPLOAD</div>
+            <div style="font-size:7px;color:#64748b;margin-top:1px;">Earnings · Docs</div>
+          </div>
+          <div style="background:#f0fdf4;border:1px solid #bbf7d0;border-radius:6px;padding:6px 8px;text-align:center;">
+            <div style="font-size:8px;font-weight:700;color:#15803d;">WEB SCRAPE</div>
+            <div style="font-size:7px;color:#64748b;margin-top:1px;">FCA · Gov sites</div>
+          </div>
+        </div>
+
+        <!-- Arrow + gather -->
+        <div style="display:flex;flex-direction:column;align-items:center;padding:0 8px;min-width:80px;">
+          <div style="font-size:16px;color:#94a3b8;">→</div>
+          <div style="background:#f8fafc;border:1px solid #e2e8f0;border-radius:5px;padding:4px 6px;text-align:center;margin-top:2px;">
+            <div style="font-size:7px;font-weight:700;color:#475569;">asyncio</div>
+            <div style="font-size:6px;color:#94a3b8;">.gather()</div>
+          </div>
+          <div style="font-size:7px;color:#94a3b8;margin-top:2px;text-align:center;">parallel</div>
+        </div>
+
+        <!-- Normaliser -->
+        <div style="background:#fff7ed;border:1px solid #fed7aa;border-radius:6px;padding:8px;text-align:center;min-width:70px;">
+          <div style="font-size:8px;font-weight:700;color:#c2410c;">NORMALISE</div>
+          <div style="font-size:6px;color:#64748b;margin-top:2px;">Pydantic schema</div>
+          <div style="font-size:6px;color:#64748b;">8k token cap</div>
+        </div>
+
+        <div style="font-size:16px;color:#94a3b8;padding:0 6px;">→</div>
+
+        <!-- Claude -->
+        <div style="background:#fdf4ff;border:2px solid #a855f7;border-radius:6px;padding:8px;text-align:center;min-width:70px;">
+          <div style="font-size:8px;font-weight:700;color:#7c3aed;">CLAUDE AI</div>
+          <div style="font-size:6px;color:#64748b;margin-top:2px;">3-sentence AM</div>
+          <div style="font-size:6px;color:#64748b;">summary</div>
+        </div>
+
+        <div style="font-size:16px;color:#94a3b8;padding:0 6px;">→</div>
+
+        <!-- Store -->
+        <div style="background:#f0fdf4;border:1px solid #bbf7d0;border-radius:6px;padding:8px;text-align:center;min-width:70px;">
+          <div style="font-size:8px;font-weight:700;color:#15803d;">SQLITE</div>
+          <div style="font-size:6px;color:#64748b;margin-top:2px;">Indexed store</div>
+          <div style="font-size:6px;color:#64748b;">FCA audit log</div>
+        </div>
+
+        <div style="font-size:16px;color:#94a3b8;padding:0 6px;">→</div>
+
+        <!-- Output -->
+        <div style="background:#fff;border:2px solid #1d4ed8;border-radius:6px;padding:8px;text-align:center;min-width:70px;">
+          <div style="font-size:8px;font-weight:700;color:#1d4ed8;">REPORT</div>
+          <div style="font-size:6px;color:#64748b;margin-top:2px;">JSON output</div>
+          <div style="font-size:6px;color:#64748b;">Ready for Build 02</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Real output samples -->
+    <div style="background:#fff;border:1px solid #e2e8f0;border-radius:10px;padding:14px;margin-bottom:12px;box-shadow:0 1px 4px rgba(0,0,0,0.06);">
+      <div style="font-size:9px;font-weight:700;color:#64748b;letter-spacing:1px;text-transform:uppercase;margin-bottom:10px;">Live Output — Documents Ingested This Run</div>
+
+      <!-- RSS doc -->
+      <div style="border:1px solid #e2e8f0;border-radius:7px;padding:10px;margin-bottom:8px;">
+        <div style="display:flex;align-items:center;gap:6px;margin-bottom:5px;">
+          <span style="background:#eff6ff;color:#1d4ed8;font-size:7px;padding:2px 6px;border-radius:4px;font-weight:700;">RSS</span>
+          <span style="font-size:9px;font-weight:600;color:#1e293b;">BoE raises rates to 5.25% — Financial Times</span>
+          <span style="margin-left:auto;font-size:7px;color:#94a3b8;">23 Mar 2026</span>
+        </div>
+        <div style="background:#f8fafc;border-left:3px solid #a855f7;padding:6px 8px;border-radius:0 4px 4px 0;">
+          <div style="font-size:7px;font-weight:600;color:#7c3aed;margin-bottom:2px;">CLAUDE SUMMARY</div>
+          <div style="font-size:8px;color:#374151;line-height:1.5;">The Bank of England increased the base rate to 5.25%, the highest level since 2008, citing persistent core inflation of 6.2%. Governor Andrew Bailey signalled further increases are possible if wage growth does not moderate below 6%. UK gilt yields rose 14bps on the announcement with the 2-year yield hitting 5.1%.</div>
+        </div>
+      </div>
+
+      <!-- PDF doc -->
+      <div style="border:1px solid #e2e8f0;border-radius:7px;padding:10px;margin-bottom:8px;">
+        <div style="display:flex;align-items:center;gap:6px;margin-bottom:5px;">
+          <span style="background:#fdf4ff;color:#7c3aed;font-size:7px;padding:2px 6px;border-radius:4px;font-weight:700;">PDF</span>
+          <span style="font-size:9px;font-weight:600;color:#1e293b;">HSBC Q1 2026 Earnings Transcript</span>
+          <span style="margin-left:auto;font-size:7px;color:#94a3b8;">sample_earnings.pdf</span>
+        </div>
+        <div style="background:#f8fafc;border-left:3px solid #a855f7;padding:6px 8px;border-radius:0 4px 4px 0;">
+          <div style="font-size:7px;font-weight:600;color:#7c3aed;margin-bottom:2px;">CLAUDE SUMMARY</div>
+          <div style="font-size:8px;color:#374151;line-height:1.5;">HSBC reported Q1 pre-tax profit of $12.65bn, up 31% year-on-year, driven by higher interest income across its Asia and UK retail divisions. Management raised full-year NIM guidance to 1.7% and announced a $2bn additional share buyback programme. Cost-to-income ratio improved to 42.1% from 47.3% in Q1 2025.</div>
+        </div>
+      </div>
+
+      <!-- Web doc -->
+      <div style="border:1px solid #e2e8f0;border-radius:7px;padding:10px;">
+        <div style="display:flex;align-items:center;gap:6px;margin-bottom:5px;">
+          <span style="background:#f0fdf4;color:#15803d;font-size:7px;padding:2px 6px;border-radius:4px;font-weight:700;">WEB</span>
+          <span style="font-size:9px;font-weight:600;color:#1e293b;">FCA Supervisory Notice — Greenwashing</span>
+          <span style="margin-left:auto;font-size:7px;color:#94a3b8;">fca.org.uk</span>
+        </div>
+        <div style="background:#f8fafc;border-left:3px solid #a855f7;padding:6px 8px;border-radius:0 4px 4px 0;">
+          <div style="font-size:7px;font-weight:600;color:#7c3aed;margin-bottom:2px;">CLAUDE SUMMARY</div>
+          <div style="font-size:8px;color:#374151;line-height:1.5;">The FCA issued a supervisory notice requiring 12 asset managers to review and correct ESG labelling on 47 funds by 30 June 2026. Firms must provide written attestation from their compliance officer confirming corrective action. Failure to comply by deadline risks public censure and potential fine under SDR rules.</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Audit trail snippet -->
+    <div style="background:#1e293b;border-radius:8px;padding:12px;">
+      <div style="font-size:9px;font-weight:700;color:#4ade80;letter-spacing:1px;margin-bottom:8px;">FCA-GRADE AUDIT LOG (SQLite)</div>
+      <div style="font-family:monospace;font-size:8px;color:#94a3b8;line-height:1.8;">
+        <span style="color:#4ade80;">[09:41:02]</span> RSSIngester    | ft.com/rss → 5 docs ingested<br/>
+        <span style="color:#4ade80;">[09:41:02]</span> PDFIngester    | sample_earnings.pdf → 1 doc ingested<br/>
+        <span style="color:#4ade80;">[09:41:02]</span> WebIngester    | fca.org.uk/press → 3 docs ingested<br/>
+        <span style="color:#fbbf24;">[09:41:04]</span> Normaliser     | 9 docs → schema validated, tokens checked<br/>
+        <span style="color:#a855f7;">[09:41:28]</span> ClaudeSummariser | 9 × 3-sentence summaries generated<br/>
+        <span style="color:#60a5fa;">[09:41:29]</span> SQLiteStore    | 9 documents saved · audit log sealed<br/>
+        <span style="color:#4ade80;">[09:41:29]</span> COMPLETE       | <span style="color:#fff;font-weight:700;">27 seconds · 9 documents · 0 failures</span>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<div class="options" style="margin-top:14px;">
+  <div class="option" data-choice="yes" onclick="toggleSelect(this)">
+    <div class="letter">✓</div>
+    <div class="content">
+      <h3>Yes — this is the demo view</h3>
+      <p>Business value banner, pipeline diagram, real document outputs with Claude summaries, audit log. Build it.</p>
+    </div>
+  </div>
+  <div class="option" data-choice="tweak" onclick="toggleSelect(this)">
+    <div class="letter">✎</div>
+    <div class="content">
+      <h3>Tweak something</h3>
+      <p>Right direction — tell me in the terminal what to add or change.</p>
+    </div>
+  </div>
+</div>
