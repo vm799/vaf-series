@@ -39,7 +39,7 @@ const CONFIG = {
       name: "Security Validation",
       shortName: "Sanitisation",
       day: 1,
-      status: "running",
+      status: "live",
       icon: "⛊",
       accent: "#FF6B6B",
       dataFile: "data/build_02.json",

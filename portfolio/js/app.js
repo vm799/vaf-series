@@ -3,7 +3,7 @@
  * Handles navigation, tabs, data loading, and dynamic rendering.
  */
 
-const App = {
+var App = {
 
   // ── Utilities ──────────────────────────────────────────
 
@@ -441,52 +441,13 @@ const App = {
       if (!resp.ok) throw new Error(`HTTP ${resp.status}`);
       const data = await resp.json();
 
-      const sourceFilterMap = {
-        rss_count: 'rss',
-        pdf_count: 'pdf',
-        web_count: 'web',
-        email_count: 'email',
-      };
-
-      const metricsHtml = (resultsConfig.metrics || []).map(m => {
-        let value = data[m.key];
-        if (value === undefined) value = '—';
-        const filter = sourceFilterMap[m.key];
-        const hasFilter = filter && data.documents?.some(d => d.source_type === filter);
-        return `
-          <div class="results-metric ${hasFilter ? 'results-metric--clickable' : ''}"
-               ${hasFilter ? `data-filter="${filter}" onclick="App.filterDocuments('${containerId}', '${filter}')"` : ''}>
-            <div class="results-metric-value">${value}${m.suffix || ''}</div>
-            <div class="results-metric-label">${m.label}</div>
-            ${hasFilter ? '<div class="results-metric-hint">click to drill down</div>' : ''}
-          </div>
-        `;
-      }).join('');
-
-      const docsHtml = this._renderDocTable(data.documents || [], null);
-
-      container.innerHTML = `
-        <div class="results-live">
-          <div class="results-live-header">
-            <span class="nav-status-dot"></span>
-            Live Results — Generated ${data.generated_at || 'N/A'}
-          </div>
-          <div class="results-metrics">${metricsHtml}</div>
-        </div>
-        <div class="results-doc-section" id="${containerId}-docs">
-          <div class="results-doc-header">
-            <span id="${containerId}-filter-label">All Documents</span>
-            <button class="results-doc-clear" id="${containerId}-clear" style="display:none"
-              onclick="App.filterDocuments('${containerId}', null)">
-              ✕ Clear filter
-            </button>
-          </div>
-          ${docsHtml}
-        </div>
-      `;
-
-      // store data on container for filtering
       container._data = data;
+
+      if (resultsConfig.type === 'sanitisation') {
+        container.innerHTML = this._renderSanitisationResults(data, containerId);
+      } else {
+        container.innerHTML = this._renderIngestionResults(data, resultsConfig, containerId);
+      }
     } catch (err) {
       container.innerHTML = `
         <div class="results-empty">
@@ -503,6 +464,131 @@ const App = {
     }
   },
 
+  _renderIngestionResults(data, resultsConfig, containerId) {
+    const sourceFilterMap = { rss_count: 'rss', pdf_count: 'pdf', web_count: 'web', email_count: 'email' };
+    const metricsHtml = (resultsConfig.metrics || []).map(m => {
+      let value = data[m.key];
+      if (value === undefined) value = '—';
+      const filter = sourceFilterMap[m.key];
+      const hasFilter = filter && data.documents?.some(d => d.source_type === filter);
+      return `
+        <div class="results-metric ${hasFilter ? 'results-metric--clickable' : ''}"
+             ${hasFilter ? `data-filter="${filter}" onclick="App.filterDocuments('${containerId}', '${filter}')"` : ''}>
+          <div class="results-metric-value">${value}${m.suffix || ''}</div>
+          <div class="results-metric-label">${m.label}</div>
+          ${hasFilter ? '<div class="results-metric-hint">click to filter</div>' : ''}
+        </div>
+      `;
+    }).join('');
+    return `
+      <div class="results-live">
+        <div class="results-live-header">
+          <span class="nav-status-dot"></span>
+          Live Results — Generated ${data.generated_at ? data.generated_at.slice(0,16).replace('T',' ') : 'N/A'}
+        </div>
+        <div class="results-metrics">${metricsHtml}</div>
+      </div>
+      <div class="results-doc-section" id="${containerId}-docs">
+        <div class="results-doc-header">
+          <span id="${containerId}-filter-label">All Documents</span>
+          <button class="results-doc-clear" id="${containerId}-clear" style="display:none"
+            onclick="App.filterDocuments('${containerId}', null)">✕ Clear filter</button>
+        </div>
+        ${this._renderDocTable(data.documents || [], null)}
+      </div>
+    `;
+  },
+
+  _renderSanitisationResults(data, containerId) {
+    const docs = data.documents || [];
+    const blocked = docs.filter(d => d.status === 'BLOCKED');
+    const redacted = docs.filter(d => d.status === 'REDACTED');
+    const passed  = docs.filter(d => d.status === 'PASSED');
+
+    // Aggregate PII types across all docs
+    const piiTypes = {};
+    docs.forEach(doc => {
+      (doc.actions || []).forEach(a => {
+        const m = a.match(/^pii_redacted:([^:]+):(\d+)$/);
+        if (m) piiTypes[m[1]] = (piiTypes[m[1]] || 0) + parseInt(m[2]);
+      });
+    });
+
+    const totalInjections = docs.reduce((s, d) => s + (d.injection_attempts || 0), 0);
+    const totalPii        = docs.reduce((s, d) => s + (d.pii_removed || 0), 0);
+
+    const verdictMetrics = [
+      { key: 'input_count',  label: 'Documents Processed', value: data.input_count,  filter: null,      cls: '' },
+      { key: 'passed',       label: 'Passed Clean',         value: passed.length,     filter: 'PASSED',  cls: 'metric--pass' },
+      { key: 'blocked',      label: 'Threats Blocked',      value: blocked.length,    filter: 'BLOCKED', cls: 'metric--block' },
+      { key: 'redacted',     label: 'PII Redacted',         value: redacted.length,   filter: 'REDACTED',cls: 'metric--redact' },
+    ];
+
+    const metricsHtml = verdictMetrics.map(m => `
+      <div class="results-metric ${m.filter ? 'results-metric--clickable' : ''} ${m.cls}"
+           ${m.filter ? `data-filter="${m.filter}" onclick="App.filterSanitisation('${containerId}', '${m.filter}')"` : ''}>
+        <div class="results-metric-value">${m.value}</div>
+        <div class="results-metric-label">${m.label}</div>
+        ${m.filter ? '<div class="results-metric-hint">click to drill down</div>' : ''}
+      </div>
+    `).join('');
+
+    // Security audit panels
+    const threatPanel = totalInjections > 0 ? `
+      <div class="sec-panel sec-panel--blocked">
+        <div class="sec-panel-title">🚨 Injection Attempts Neutralised (${totalInjections})</div>
+        ${blocked.map(doc => `
+          <div class="sec-panel-row">
+            <span class="sec-verdict sec-verdict--blocked">BLOCKED</span>
+            <span class="sec-doc-title">${doc.title}</span>
+            <span class="sec-actions">${(doc.actions||[]).filter(a=>a.startsWith('injection')).join(', ') || 'injection_neutralised'} ×${doc.injection_attempts}</span>
+          </div>
+        `).join('')}
+      </div>
+    ` : '';
+
+    const piiPanel = totalPii > 0 ? `
+      <div class="sec-panel sec-panel--redacted">
+        <div class="sec-panel-title">🔒 PII Redacted — ${totalPii} items across ${redacted.length} document${redacted.length !== 1 ? 's' : ''}</div>
+        <div class="sec-pii-types">
+          ${Object.entries(piiTypes).map(([type, count]) => `
+            <span class="sec-pii-badge">${type.replace('_', ' ')} ×${count}</span>
+          `).join('')}
+        </div>
+        ${redacted.map(doc => `
+          <div class="sec-panel-row">
+            <span class="sec-verdict sec-verdict--redacted">REDACTED</span>
+            <span class="sec-doc-title">${doc.title}</span>
+            <span class="sec-actions">${doc.pii_removed} item${doc.pii_removed !== 1 ? 's' : ''} removed</span>
+          </div>
+        `).join('')}
+      </div>
+    ` : '';
+
+    return `
+      <div class="results-live">
+        <div class="results-live-header">
+          <span class="nav-status-dot"></span>
+          Security Audit — Run ${data.generated_at ? data.generated_at.slice(0,16).replace('T',' ') : 'N/A'}
+          <span class="results-pii-mode">PII Mode: ${(data.pii_mode || 'redact').toUpperCase()}</span>
+        </div>
+        <div class="results-metrics">${metricsHtml}</div>
+      </div>
+
+      ${threatPanel}
+      ${piiPanel}
+
+      <div class="results-doc-section" id="${containerId}-docs">
+        <div class="results-doc-header">
+          <span id="${containerId}-filter-label">All Documents</span>
+          <button class="results-doc-clear" id="${containerId}-clear" style="display:none"
+            onclick="App.filterSanitisation('${containerId}', null)">✕ Clear filter</button>
+        </div>
+        ${this._renderSanitisationTable(docs, null)}
+      </div>
+    `;
+  },
+
   filterDocuments(containerId, filter) {
     const container = document.getElementById(containerId);
     if (!container?._data) return;
@@ -512,9 +598,24 @@ const App = {
     if (tableEl) tableEl.outerHTML = this._renderDocTable(filtered, filter);
     const label = document.getElementById(`${containerId}-filter-label`);
     const clearBtn = document.getElementById(`${containerId}-clear`);
-    if (label) label.textContent = filter ? `${filter.toUpperCase()} documents (${filtered.length})` : `All Documents`;
+    if (label) label.textContent = filter ? `${filter.toUpperCase()} — ${filtered.length} docs` : 'All Documents';
     if (clearBtn) clearBtn.style.display = filter ? 'inline-block' : 'none';
-    // toggle active state on metrics
+    container.querySelectorAll('.results-metric--clickable').forEach(el => {
+      el.classList.toggle('results-metric--active', el.dataset.filter === filter);
+    });
+  },
+
+  filterSanitisation(containerId, filter) {
+    const container = document.getElementById(containerId);
+    if (!container?._data) return;
+    const docs = container._data.documents || [];
+    const filtered = filter ? docs.filter(d => d.status === filter) : docs;
+    const tableEl = container.querySelector('.results-doc-table-wrap');
+    if (tableEl) tableEl.outerHTML = this._renderSanitisationTable(filtered, filter);
+    const label = document.getElementById(`${containerId}-filter-label`);
+    const clearBtn = document.getElementById(`${containerId}-clear`);
+    if (label) label.textContent = filter ? `${filter} — ${filtered.length} docs` : 'All Documents';
+    if (clearBtn) clearBtn.style.display = filter ? 'inline-block' : 'none';
     container.querySelectorAll('.results-metric--clickable').forEach(el => {
       el.classList.toggle('results-metric--active', el.dataset.filter === filter);
     });
@@ -536,6 +637,35 @@ const App = {
       <div class="results-doc-table-wrap">
         <table class="results-doc-table">
           <thead><tr><th>Source</th><th>Title</th><th>Summary</th><th>Ingested</th></tr></thead>
+          <tbody>${rows}</tbody>
+        </table>
+        ${overflow}
+      </div>
+    `;
+  },
+
+  _renderSanitisationTable(docs, filter) {
+    if (!docs.length) return `<p class="results-empty-text" style="padding:var(--space-lg)">No documents match this filter.</p>`;
+    const sourceIcon = { rss: '◈', pdf: '▣', web: '◉', email: '✉' };
+    const verdictClass = { PASSED: 'verdict--pass', BLOCKED: 'verdict--block', REDACTED: 'verdict--redact' };
+    const rows = docs.slice(0, 50).map(doc => `
+      <tr>
+        <td><span class="doc-source-badge doc-source-${doc.source_type}">${sourceIcon[doc.source_type] || '·'} ${doc.source_type}</span></td>
+        <td class="doc-title">${doc.title || '—'}</td>
+        <td><span class="sec-verdict ${verdictClass[doc.status] || ''}">${doc.status}</span></td>
+        <td class="doc-summary">${
+          doc.status === 'BLOCKED'  ? `⚠ ${doc.injection_attempts} injection pattern${doc.injection_attempts !== 1 ? 's' : ''} detected` :
+          doc.status === 'REDACTED' ? `🔒 ${doc.pii_removed} PII item${doc.pii_removed !== 1 ? 's' : ''} removed` :
+          '✓ No threats found'
+        }</td>
+        <td class="doc-time">${doc.sanitised_at ? doc.sanitised_at.slice(0,16).replace('T',' ') : '—'}</td>
+      </tr>
+    `).join('');
+    const overflow = docs.length > 50 ? `<p class="results-overflow">Showing 50 of ${docs.length} documents</p>` : '';
+    return `
+      <div class="results-doc-table-wrap">
+        <table class="results-doc-table">
+          <thead><tr><th>Source</th><th>Title</th><th>Verdict</th><th>Detail</th><th>Time</th></tr></thead>
           <tbody>${rows}</tbody>
         </table>
         ${overflow}

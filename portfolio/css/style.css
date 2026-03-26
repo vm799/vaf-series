@@ -1362,6 +1362,108 @@ body::before {
 }
 
 
+/* ── Security / Sanitisation Results ─────────────────────── */
+
+.results-pii-mode {
+  margin-left: auto;
+  font-family: var(--font-mono);
+  font-size: 0.65rem;
+  letter-spacing: 0.08em;
+  color: var(--text-dim);
+  border: 1px solid var(--border-subtle);
+  padding: 2px 8px;
+  border-radius: 2px;
+}
+
+/* Verdict colour variants on metric cards */
+.results-metric.metric--pass   { border-color: rgba(52,211,153,0.3); }
+.results-metric.metric--block  { border-color: rgba(255,107,107,0.4); }
+.results-metric.metric--redact { border-color: rgba(251,191,36,0.3); }
+.results-metric.metric--pass  .results-metric-value { color: #34D399; }
+.results-metric.metric--block .results-metric-value { color: #FF6B6B; }
+.results-metric.metric--redact .results-metric-value { color: #FBBF24; }
+.results-metric--active.metric--pass   { background: rgba(52,211,153,0.06) !important; border-color: #34D399 !important; }
+.results-metric--active.metric--block  { background: rgba(255,107,107,0.06) !important; border-color: #FF6B6B !important; }
+.results-metric--active.metric--redact { background: rgba(251,191,36,0.06) !important; border-color: #FBBF24 !important; }
+
+/* Security audit panels */
+.sec-panel {
+  border: 1px solid var(--border-subtle);
+  border-radius: 4px;
+  padding: var(--space-lg);
+  margin-bottom: var(--space-lg);
+}
+.sec-panel--blocked  { border-color: rgba(255,107,107,0.3); background: rgba(255,107,107,0.03); }
+.sec-panel--redacted { border-color: rgba(251,191,36,0.3);  background: rgba(251,191,36,0.03); }
+
+.sec-panel-title {
+  font-family: var(--font-mono);
+  font-size: 0.7rem;
+  letter-spacing: 0.06em;
+  color: var(--text-secondary);
+  margin-bottom: var(--space-md);
+  text-transform: uppercase;
+}
+
+.sec-panel-row {
+  display: flex;
+  align-items: baseline;
+  gap: var(--space-md);
+  padding: var(--space-xs) 0;
+  border-top: 1px solid var(--border-subtle);
+  font-size: 0.82rem;
+}
+
+.sec-pii-types {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-xs);
+  margin-bottom: var(--space-md);
+}
+.sec-pii-badge {
+  font-family: var(--font-mono);
+  font-size: 0.65rem;
+  background: rgba(251,191,36,0.1);
+  color: #FBBF24;
+  border: 1px solid rgba(251,191,36,0.25);
+  padding: 2px 8px;
+  border-radius: 2px;
+  letter-spacing: 0.04em;
+}
+
+.sec-doc-title {
+  color: var(--text-primary);
+  flex: 1;
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.sec-actions {
+  font-family: var(--font-mono);
+  font-size: 0.65rem;
+  color: var(--text-dim);
+  white-space: nowrap;
+}
+
+/* Inline verdict badges */
+.sec-verdict {
+  font-family: var(--font-mono);
+  font-size: 0.6rem;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  padding: 2px 7px;
+  border-radius: 2px;
+  white-space: nowrap;
+  flex-shrink: 0;
+}
+.verdict--pass,
+.sec-verdict--passed  { background: rgba(52,211,153,0.1);  color: #34D399; border: 1px solid rgba(52,211,153,0.25); }
+.verdict--block,
+.sec-verdict--blocked  { background: rgba(255,107,107,0.1); color: #FF6B6B; border: 1px solid rgba(255,107,107,0.25); }
+.verdict--redact,
+.sec-verdict--redacted { background: rgba(251,191,36,0.1);  color: #FBBF24; border: 1px solid rgba(251,191,36,0.25); }
+
 /* ── Footer ───────────────────────────────────────────────── */
 
 .footer {
