@@ -445,6 +445,8 @@ var App = {
 
       if (resultsConfig.type === 'sanitisation') {
         container.innerHTML = this._renderSanitisationResults(data, containerId);
+      } else if (resultsConfig.type === 'identity') {
+        container.innerHTML = this._renderIdentityResults(data, resultsConfig);
       } else {
         container.innerHTML = this._renderIngestionResults(data, resultsConfig, containerId);
       }
@@ -673,6 +675,51 @@ var App = {
     `;
   },
 
+
+  _renderIdentityResults(data, resultsConfig) {
+    const metricsHtml = (resultsConfig.metrics || []).map(m => {
+      const value = data[m.key] !== undefined ? data[m.key] : '—';
+      return `
+        <div class="results-metric">
+          <div class="results-metric-value">${value}</div>
+          <div class="results-metric-label">${m.label}</div>
+        </div>`;
+    }).join('');
+
+    const comparisonsHtml = (data.comparisons || []).map((c, i) => `
+      <div class="identity-comparison">
+        <div class="identity-prompt">Prompt ${i + 1}: ${c.prompt}</div>
+        <div class="identity-pair">
+          <div class="identity-col identity-col--generic">
+            <div class="identity-col-label">
+              ✗ Generic AI
+              ${c.generic_violations?.length ? `<span class="identity-violation-badge">${c.generic_violations.length} violation${c.generic_violations.length !== 1 ? 's' : ''}</span>` : ''}
+            </div>
+            <div class="identity-col-text">${c.generic_response}</div>
+          </div>
+          <div class="identity-col identity-col--branded">
+            <div class="identity-col-label">
+              ✓ Firm-Branded
+              ${c.branded_disclaimer_present ? '<span class="identity-disclaimer-badge">FCA disclaimer ✓</span>' : ''}
+            </div>
+            <div class="identity-col-text">${c.branded_response}</div>
+          </div>
+        </div>
+      </div>
+    `).join('');
+
+    return `
+      <div class="results-live">
+        <div class="results-live-header">
+          <span class="nav-status-dot"></span>
+          Identity Audit — Run ${data.generated_at ? data.generated_at.slice(0,16).replace('T',' ') : 'N/A'}
+          <span class="results-pii-mode">Model: ${data.model || 'claude'}</span>
+        </div>
+        <div class="results-metrics">${metricsHtml}</div>
+      </div>
+      <div class="identity-comparisons">${comparisonsHtml}</div>
+    `;
+  },
 
   // ── Navigation Helper ──────────────────────────────────
 

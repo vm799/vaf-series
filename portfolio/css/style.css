@@ -1464,6 +1464,72 @@ body::before {
 .verdict--redact,
 .sec-verdict--redacted { background: rgba(251,191,36,0.1);  color: #FBBF24; border: 1px solid rgba(251,191,36,0.25); }
 
+/* ── Identity A/B Comparison ─────────────────────────────── */
+
+.identity-comparisons { display: flex; flex-direction: column; gap: var(--space-2xl); margin-top: var(--space-xl); }
+
+.identity-comparison { border: 1px solid var(--border-subtle); border-radius: 4px; overflow: hidden; }
+
+.identity-prompt {
+  font-family: var(--font-mono);
+  font-size: 0.68rem;
+  letter-spacing: 0.05em;
+  color: var(--text-dim);
+  background: var(--bg-elevated);
+  padding: var(--space-sm) var(--space-lg);
+  border-bottom: 1px solid var(--border-subtle);
+  text-transform: uppercase;
+}
+
+.identity-pair {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+}
+@media (max-width: 700px) { .identity-pair { grid-template-columns: 1fr; } }
+
+.identity-col { padding: var(--space-lg); }
+.identity-col--generic { border-right: 1px solid var(--border-subtle); background: rgba(255,107,107,0.02); }
+.identity-col--branded { background: rgba(52,211,153,0.02); }
+
+.identity-col-label {
+  font-family: var(--font-mono);
+  font-size: 0.62rem;
+  letter-spacing: 0.08em;
+  font-weight: 600;
+  margin-bottom: var(--space-md);
+  display: flex;
+  align-items: center;
+  gap: var(--space-sm);
+}
+.identity-col--generic .identity-col-label { color: #FF6B6B; }
+.identity-col--branded .identity-col-label { color: #34D399; }
+
+.identity-col-text {
+  font-size: 0.82rem;
+  line-height: 1.65;
+  color: var(--text-secondary);
+  white-space: pre-wrap;
+}
+
+.identity-violation-badge {
+  font-family: var(--font-mono);
+  font-size: 0.58rem;
+  background: rgba(255,107,107,0.15);
+  color: #FF6B6B;
+  border: 1px solid rgba(255,107,107,0.3);
+  padding: 1px 6px;
+  border-radius: 2px;
+}
+.identity-disclaimer-badge {
+  font-family: var(--font-mono);
+  font-size: 0.58rem;
+  background: rgba(52,211,153,0.1);
+  color: #34D399;
+  border: 1px solid rgba(52,211,153,0.25);
+  padding: 1px 6px;
+  border-radius: 2px;
+}
+
 /* ── Footer ───────────────────────────────────────────────── */
 
 .footer {

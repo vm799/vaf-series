@@ -421,9 +421,116 @@ const BUILDS = {
       { decision: "Caching", choice: "In-memory cache on PersonaLoader", reasoning: "Identity rarely changes mid-run. Avoid repeated file I/O.", alternative: "No cache — read file on every call (wasteful)" },
     ],
     code: [
-      { title: "PersonaLoader with Cache", language: "python", code: `class PersonaLoader:\n    _cache = None\n\n    @classmethod\n    def load(cls, path: str = "identity.md") -> str:\n        if cls._cache is None:\n            if not Path(path).exists():\n                raise FileNotFoundError(\n                    f"Identity file not found: {path}"\n                )\n            cls._cache = Path(path).read_text()\n        return cls._cache` },
+      {
+        title: "PersonaLoader — instance cache",
+        language: "python",
+        code: `class PersonaLoader:
+    def __init__(
+        self,
+        identity_path: str = "identity_files/identity.md",
+        compliance_path: str = "identity_files/compliance_rules.md",
+    ):
+        self._identity_path   = Path(identity_path)
+        self._compliance_path = Path(compliance_path)
+        self._cache: PersonaConfig | None = None
+
+    def load(self) -> PersonaConfig:
+        if self._cache:
+            return self._cache  # files read once per session
+
+        identity   = self._identity_path.read_text(encoding="utf-8")
+        compliance = self._compliance_path.read_text(encoding="utf-8")
+        combined   = (
+            f"{identity}\\n\\n---\\n\\n{compliance}\\n\\n---\\n\\n"
+            "IMPORTANT: Every response must comply with all rules above."
+        )
+        self._cache = PersonaConfig(
+            identity=identity,
+            compliance_rules=compliance,
+            combined_system_prompt=combined,
+        )
+        return self._cache`,
+      },
+      {
+        title: "identity.md — brand voice definition",
+        language: "markdown",
+        code: `# Firm Identity
+
+## Tone
+- Authoritative but not arrogant
+- Data-driven: always support assertions with figures
+- Professional British English (colour, recognise, analyse)
+
+## Style Rules
+- Never use first person singular — use "our analysis suggests"
+- Never hedge without data ("it seems", "perhaps", "maybe")
+- Numbers: £1.2bn not £1,200,000,000
+
+## Preferred Vocabulary
+USE: "our conviction", "risk-adjusted", "mandate", "drawdown"
+AVOID: "awesome", "exciting opportunity", "game-changer"`,
+      },
+      {
+        title: "compliance_rules.md — FCA guardrails",
+        language: "markdown",
+        code: `# Compliance Rules
+
+## Mandatory Disclaimers
+All client-facing output must end with:
+"Capital at risk. Past performance is not a reliable indicator
+of future results. This communication does not constitute
+investment advice. [Firm] is authorised and regulated by the FCA."
+
+## Prohibited Language
+- NEVER use: "guaranteed", "risk-free", "certain returns"
+- NEVER imply capital protection without qualification
+
+## MiFID II
+- Investment recommendations must include basis and key risks
+- All outputs are DRAFTS requiring human approval`,
+      },
+      {
+        title: "run.py — A/B comparison with compliance scoring",
+        language: "python",
+        code: `PROHIBITED_PHRASES = [
+    "guaranteed", "risk-free", "certain returns",
+    "you will", "will definitely", "no risk",
+]
+
+def run_comparison(client, persona, prompt: str) -> dict:
+    # Generic — no system prompt
+    generic = client.messages.create(
+        model=MODEL, max_tokens=250,
+        messages=[{"role": "user", "content": prompt}],
+    ).content[0].text.strip()
+
+    # Branded — full identity + compliance context
+    branded = client.messages.create(
+        model=MODEL, max_tokens=250,
+        system=persona.combined_system_prompt,
+        messages=[{"role": "user", "content": prompt}],
+    ).content[0].text.strip()
+
+    violations = [p for p in PROHIBITED_PHRASES if p in generic.lower()]
+    return {
+        "generic_response":           generic,
+        "branded_response":           branded,
+        "generic_violations":         violations,
+        "branded_disclaimer_present": "capital at risk" in branded.lower(),
+    }`,
+      },
     ],
-    resultsConfig: { type: "identity", emptyMessage: "Build 03 has not been run yet. Coming Day 2." },
+    resultsConfig: {
+      type: "identity",
+      emptyMessage: "Build 03 has not been run yet. Run the identity pipeline to see the A/B comparison.",
+      metrics: [
+        { key: "identity_rules",     label: "Identity Rules Loaded" },
+        { key: "compliance_rules",   label: "Compliance Rules Loaded" },
+        { key: "prompts_tested",     label: "Prompts Tested" },
+        { key: "generic_violations", label: "FCA Violations (generic)" },
+        { key: "branded_disclaimers",label: "Disclaimers Present (branded)" },
+      ],
+    },
   },
 
   "04": {

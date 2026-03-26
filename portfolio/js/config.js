@@ -55,10 +55,10 @@ const CONFIG = {
       name: "Identity & Persona",
       shortName: "Identity",
       day: 2,
-      status: "queued",
+      status: "running",
       icon: "◉",
       accent: "#A78BFA",
-      dataFile: null,
+      dataFile: "data/build_03.json",
       tags: ["Persona Loading", "Brand Voice", "Compliance Rules", "Pydantic"],
     },
     {
