@@ -447,6 +447,18 @@ var App = {
         container.innerHTML = this._renderSanitisationResults(data, containerId);
       } else if (resultsConfig.type === 'identity') {
         container.innerHTML = this._renderIdentityResults(data, resultsConfig);
+      } else if (resultsConfig.type === 'rag') {
+        container.innerHTML = this._renderRagResults(data, resultsConfig);
+      } else if (resultsConfig.type === 'self-evolving') {
+        container.innerHTML = this._renderSelfEvolvingResults(data, resultsConfig);
+      } else if (resultsConfig.type === 'council') {
+        container.innerHTML = this._renderCouncilResults(data, resultsConfig);
+      } else if (resultsConfig.type === 'compliance') {
+        container.innerHTML = this._renderComplianceResults(data, resultsConfig);
+      } else if (resultsConfig.type === 'synthesis') {
+        container.innerHTML = this._renderSynthesisResults(data, resultsConfig);
+      } else if (resultsConfig.type === 'output') {
+        container.innerHTML = this._renderOutputResults(data, resultsConfig);
       } else {
         container.innerHTML = this._renderIngestionResults(data, resultsConfig, containerId);
       }
@@ -719,6 +731,186 @@ var App = {
       </div>
       <div class="identity-comparisons">${comparisonsHtml}</div>
     `;
+  },
+
+  // ── Generic metric helper ──────────────────────────────
+
+  _metricValue(data, m) {
+    let v = data[m.key];
+    if (v === undefined) return '—';
+    if (m.transform === 'length') return Array.isArray(v) ? v.length : '—';
+    if (m.transform === 'nav') return typeof v === 'number' ? `£${(v / 1e6).toFixed(0)}m` : v;
+    if (m.transform === 'dryrun') return v ? 'Dry Run' : 'Live';
+    return v;
+  },
+
+  _metricsRow(data, resultsConfig) {
+    return (resultsConfig.metrics || []).map(m => {
+      const val = this._metricValue(data, m);
+      const variant = m.variant ? ` metric--${m.variant}` : '';
+      return `
+        <div class="results-metric${variant}">
+          <div class="results-metric-value">${val}${m.suffix || ''}</div>
+          <div class="results-metric-label">${m.label}</div>
+        </div>`;
+    }).join('');
+  },
+
+  _liveHeader(data, title) {
+    const ts = data.generated_at ? data.generated_at.slice(0,16).replace('T',' ') : 'N/A';
+    return `<div class="results-live-header"><span class="nav-status-dot"></span>${title} — Run ${ts}</div>`;
+  },
+
+  // ── RAG Results ────────────────────────────────────────
+
+  _renderRagResults(data, resultsConfig) {
+    const queriesHtml = (data.queries || []).map(q => {
+      const icon = q.confidence === 'high' ? '✓' : q.confidence === 'not_found' ? '◇' : '?';
+      const cls = q.confidence === 'high' ? 'rag-answer--found' : 'rag-answer--empty';
+      const sourcesHtml = (q.sources || []).map(s => `<span class="sec-pii-badge">${s}</span>`).join('');
+      return `
+        <div class="rag-answer ${cls}">
+          <div class="rag-question">❓ ${q.question}</div>
+          <div class="rag-response">${icon} ${q.answer}</div>
+          ${sourcesHtml ? `<div class="rag-sources">${sourcesHtml}</div>` : ''}
+        </div>`;
+    }).join('');
+
+    return `
+      <div class="results-live">
+        ${this._liveHeader(data, 'RAG Query Results')}
+        <div class="results-metrics">${this._metricsRow(data, resultsConfig)}</div>
+      </div>
+      <div class="rag-queries">${queriesHtml}</div>`;
+  },
+
+  // ── Self-Evolving Results ──────────────────────────────
+
+  _renderSelfEvolvingResults(data, resultsConfig) {
+    const changesHtml = (data.changes_made || []).map(c => `<li>${c}</li>`).join('');
+    return `
+      <div class="results-live">
+        ${this._liveHeader(data, 'Prompt Evolution')}
+        <div class="results-metrics">${this._metricsRow(data, resultsConfig)}</div>
+      </div>
+      <div class="evolve-panels">
+        <div class="evolve-panel evolve-panel--before">
+          <div class="evolve-label">V1 — Initial Prompt</div>
+          <pre class="evolve-prompt">${data.v1_prompt || ''}</pre>
+          <div class="evolve-sample-label">Sample output:</div>
+          <div class="evolve-sample">${data.v1_sample || ''}</div>
+        </div>
+        <div class="evolve-arrow">→</div>
+        <div class="evolve-panel evolve-panel--after">
+          <div class="evolve-label">V2 — Meta-Agent Improved</div>
+          <pre class="evolve-prompt">${data.v2_prompt || ''}</pre>
+          <div class="evolve-sample-label">Sample output:</div>
+          <div class="evolve-sample">${data.v2_sample || ''}</div>
+        </div>
+      </div>
+      ${changesHtml ? `<div class="evolve-changes"><strong>Changes made:</strong><ul>${changesHtml}</ul></div>` : ''}
+      ${data.rationale ? `<div class="evolve-rationale"><strong>Rationale:</strong> ${data.rationale}</div>` : ''}`;
+  },
+
+  // ── Council Results ────────────────────────────────────
+
+  _renderCouncilResults(data, resultsConfig) {
+    const verdictClass = { BUY: 'verdict--pass', SELL: 'verdict--block', HOLD: 'verdict--redact' };
+    const agentsHtml = (data.agents || []).map(a => {
+      const pointsHtml = (a.key_points || []).map(p => `<li>${p}</li>`).join('');
+      return `
+        <div class="council-agent">
+          <div class="council-agent-header">
+            <span class="council-agent-name">${a.name}</span>
+            <span class="sec-verdict ${verdictClass[a.verdict] || ''}">${a.verdict}</span>
+            <span class="council-confidence">confidence: ${a.confidence}</span>
+          </div>
+          <ul class="council-points">${pointsHtml}</ul>
+          <p class="council-summary">${a.summary}</p>
+        </div>`;
+    }).join('');
+
+    return `
+      <div class="results-live">
+        ${this._liveHeader(data, `Council — ${data.company || ''}`)}
+        <div class="results-metrics">${this._metricsRow(data, resultsConfig)}</div>
+      </div>
+      <div class="council-agents">${agentsHtml}</div>`;
+  },
+
+  // ── Compliance Results ─────────────────────────────────
+
+  _renderComplianceResults(data, resultsConfig) {
+    const sev = { CRITICAL: 'verdict--block', HIGH: 'verdict--block', MEDIUM: 'verdict--redact', LOW: '' };
+    const violationsHtml = (data.violations || []).map(v => `
+      <div class="sec-panel sec-panel--blocked">
+        <div class="sec-panel-row">
+          <span class="sec-verdict ${sev[v.severity] || ''}">${v.severity}</span>
+          <strong>${v.rule_id}</strong>
+          <span>${v.description}</span>
+        </div>
+        <div class="sec-panel-row" style="font-style:italic;opacity:0.7;">"${v.violating_text}"</div>
+        <div class="sec-panel-row" style="color:var(--color-pass);">Fix: ${v.suggested_fix}</div>
+      </div>`).join('');
+
+    const rewriteHtml = data.compliant_rewrite ? `
+      <div class="sec-panel sec-panel--redacted" style="margin-top:var(--space-lg);">
+        <div class="sec-panel-row"><strong>Compliant Rewrite</strong></div>
+        <pre style="white-space:pre-wrap;opacity:0.85;font-size:0.8rem;">${data.compliant_rewrite}</pre>
+      </div>` : '';
+
+    return `
+      <div class="results-live">
+        ${this._liveHeader(data, 'Compliance Audit')}
+        <div class="results-metrics">${this._metricsRow(data, resultsConfig)}</div>
+      </div>
+      ${violationsHtml}
+      ${rewriteHtml}`;
+  },
+
+  // ── Synthesis Results ──────────────────────────────────
+
+  _renderSynthesisResults(data, resultsConfig) {
+    const positionsHtml = (data.positions || []).map(p => {
+      const pnl = p.overnight_pnl_pct;
+      const sign = pnl >= 0 ? '+' : '';
+      const cls = pnl >= 0 ? 'style="color:var(--color-pass)"' : 'style="color:var(--color-block)"';
+      return `<tr><td>${p.name}</td><td>${p.weight_pct}%</td><td ${cls}>${sign}${pnl}%</td></tr>`;
+    }).join('');
+
+    return `
+      <div class="results-live">
+        ${this._liveHeader(data, 'Morning Brief')}
+        <div class="results-metrics">${this._metricsRow(data, resultsConfig)}</div>
+      </div>
+      ${positionsHtml ? `
+        <table class="synthesis-positions">
+          <thead><tr><th>Position</th><th>Weight</th><th>Overnight P&L</th></tr></thead>
+          <tbody>${positionsHtml}</tbody>
+        </table>` : ''}
+      <div class="synthesis-brief">${(data.brief || '').replace(/\n/g, '<br>')}</div>`;
+  },
+
+  // ── Output Results ─────────────────────────────────────
+
+  _renderOutputResults(data, resultsConfig) {
+    const logHtml = (data.delivery_log || []).map(row => {
+      const ok = row.status === 'delivered' || row.status === 'dry_run';
+      const icon = ok ? '✓' : '✗';
+      const cls = ok ? 'style="color:var(--color-pass)"' : 'style="color:var(--color-block)"';
+      return `<tr ${cls}><td>${icon}</td><td>${row.channel}</td><td>${row.status}</td><td>${row.title}</td><td>${row.delivered_at ? row.delivered_at.slice(11,19) : ''}</td></tr>`;
+    }).join('');
+
+    return `
+      <div class="results-live">
+        ${this._liveHeader(data, 'Delivery Log')}
+        <div class="results-metrics">${this._metricsRow(data, resultsConfig)}</div>
+      </div>
+      ${logHtml ? `
+        <table class="output-log">
+          <thead><tr><th></th><th>Channel</th><th>Status</th><th>Title</th><th>Time</th></tr></thead>
+          <tbody>${logHtml}</tbody>
+        </table>` : ''}`;
   },
 
   // ── Navigation Helper ──────────────────────────────────

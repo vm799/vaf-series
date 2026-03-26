@@ -571,7 +571,15 @@ def run_comparison(client, persona, prompt: str) -> dict:
     code: [
       { title: "RAG Query with Citations", language: "python", code: `async def query(self, question: str, top_k: int = 5):\n    # Embed the question\n    query_embedding = await self.embed(question)\n\n    # Find most relevant chunks\n    chunks = self.vector_store.search(\n        query_embedding, top_k=top_k\n    )\n\n    if not chunks:\n        return {"answer": "No relevant documents found.",\n                "citations": []}\n\n    # Build prompt with retrieved context\n    context = "\\n".join(c.text for c in chunks)\n    answer = await claude.complete(\n        f"Based on these documents:\\n{context}\\n\\n"\n        f"Answer: {question}"\n    )\n\n    return {"answer": answer,\n            "citations": [c.source for c in chunks]}` },
     ],
-    resultsConfig: { type: "rag", emptyMessage: "Build 04 has not been run yet. Coming Day 2." },
+    resultsConfig: {
+      type: "rag",
+      metrics: [
+        { key: "docs_ingested", label: "Docs Ingested", suffix: "" },
+        { key: "chunks_stored", label: "Chunks Stored", suffix: "" },
+        { key: "queries_answered", label: "Queries Answered", suffix: "" },
+      ],
+      emptyMessage: "Build 04 has not been run yet. Coming Day 2.",
+    },
   },
 
   "05": {
@@ -610,7 +618,15 @@ def run_comparison(client, persona, prompt: str) -> dict:
       { decision: "Uniqueness constraint", choice: "Exactly one is_current=True at any time", reasoning: "Database constraint prevents ambiguity. Only one prompt is active.", alternative: "No constraint — risk of multiple 'current' prompts" },
     ],
     code: [],
-    resultsConfig: { type: "self-evolving", emptyMessage: "Build 05 has not been run yet. Coming Day 3." },
+    resultsConfig: {
+      type: "self-evolving",
+      metrics: [
+        { key: "feedback_items", label: "Feedback Items", suffix: "" },
+        { key: "prompt_versions", label: "Prompt Versions", suffix: "" },
+        { key: "changes_made", label: "Changes Made", suffix: "", transform: "length" },
+      ],
+      emptyMessage: "Build 05 has not been run yet. Coming Day 3.",
+    },
   },
 
   "06": {
@@ -649,7 +665,16 @@ def run_comparison(client, persona, prompt: str) -> dict:
       { decision: "AI disclaimer", choice: "Enforced in formatter, non-removable", reasoning: "Ethical AI use. Cannot be stripped by downstream processing.", alternative: "Optional — risks AI content passing as human-written" },
     ],
     code: [],
-    resultsConfig: { type: "council", emptyMessage: "Build 06 has not been run yet. Coming Day 3 — this is the flagship module." },
+    resultsConfig: {
+      type: "council",
+      metrics: [
+        { key: "company", label: "Company", suffix: "" },
+        { key: "agents_run", label: "Agents Run", suffix: "" },
+        { key: "council_verdict", label: "Verdict", suffix: "" },
+        { key: "conviction", label: "Conviction", suffix: "" },
+      ],
+      emptyMessage: "Build 06 has not been run yet. Coming Day 3 — this is the flagship module.",
+    },
   },
 
   "07": {
@@ -688,7 +713,16 @@ def run_comparison(client, persona, prompt: str) -> dict:
       { decision: "Override policy", choice: "HIGH/CRITICAL review_required cannot be overridden", reasoning: "Compliance is not optional. Automated systems must escalate, not suppress.", alternative: "Allow override — risks compliance breach" },
     ],
     code: [],
-    resultsConfig: { type: "compliance", emptyMessage: "Build 07 has not been run yet. Coming Day 4." },
+    resultsConfig: {
+      type: "compliance",
+      metrics: [
+        { key: "documents_checked", label: "Documents Checked", suffix: "" },
+        { key: "violations_found", label: "Violations Found", suffix: "", variant: "block" },
+        { key: "violations_rewritten", label: "Rewritten", suffix: "" },
+        { key: "risk_level", label: "Risk Level", suffix: "" },
+      ],
+      emptyMessage: "Build 07 has not been run yet. Coming Day 4.",
+    },
   },
 
   "08": {
@@ -727,7 +761,16 @@ def run_comparison(client, persona, prompt: str) -> dict:
       { decision: "Source failure handling", choice: "Produce brief with available sources", reasoning: "A partial brief is infinitely more useful than no brief. Note which sources were unavailable.", alternative: "Fail if any source missing — blocks delivery" },
     ],
     code: [],
-    resultsConfig: { type: "synthesis", emptyMessage: "Build 08 has not been run yet. Coming Day 4." },
+    resultsConfig: {
+      type: "synthesis",
+      metrics: [
+        { key: "pm_name", label: "PM", suffix: "" },
+        { key: "total_nav", label: "NAV", suffix: "", transform: "nav" },
+        { key: "positions_covered", label: "Positions", suffix: "" },
+        { key: "brief_word_count", label: "Brief Words", suffix: "/ 500" },
+      ],
+      emptyMessage: "Build 08 has not been run yet. Coming Day 4.",
+    },
   },
 
   "09": {
@@ -766,6 +809,15 @@ def run_comparison(client, persona, prompt: str) -> dict:
       { decision: "Testing mode", choice: "DRY_RUN=true in .env", reasoning: "Test the full pipeline without actually sending messages. Essential for development.", alternative: "No test mode — every run sends real messages" },
     ],
     code: [],
-    resultsConfig: { type: "output", emptyMessage: "Build 09 has not been run yet. Coming Day 5." },
+    resultsConfig: {
+      type: "output",
+      metrics: [
+        { key: "channels_configured", label: "Channels", suffix: "" },
+        { key: "payloads_sent", label: "Payloads Sent", suffix: "" },
+        { key: "successful_deliveries", label: "Delivered", suffix: "", variant: "pass" },
+        { key: "dry_run", label: "Mode", suffix: "", transform: "dryrun" },
+      ],
+      emptyMessage: "Build 09 has not been run yet. Coming Day 5.",
+    },
   },
 };
