@@ -714,6 +714,21 @@ var App = {
     `;
   },
 
+  // ── Markdown helper ─────────────────────────────────────
+
+  _md(text) {
+    if (!text) return '';
+    return text
+      .replace(/^## (.+)$/gm, '<h3 class="md-h2">$1</h3>')
+      .replace(/^### (.+)$/gm, '<h4 class="md-h3">$1</h4>')
+      .replace(/\*\*(.+?)\*\*/g, '<strong>$1</strong>')
+      .replace(/^(\d+)\. (.+)$/gm, '<div class="md-li"><span class="md-num">$1.</span> $2</div>')
+      .replace(/^- (.+)$/gm, '<div class="md-li">• $1</div>')
+      .replace(/⚠️/g, '<span style="color:var(--accent-gold)">⚠</span>')
+      .replace(/\n{2,}/g, '<div style="height:0.8em"></div>')
+      .replace(/\n/g, '<br>');
+  },
+
   // ── Generic metric helper ──────────────────────────────
 
   _metricValue(data, m) {
@@ -729,9 +744,11 @@ var App = {
     return (resultsConfig.metrics || []).map(m => {
       const val = this._metricValue(data, m);
       const variant = m.variant ? ` metric--${m.variant}` : '';
+      const isText = typeof val === 'string' && val.length > 4;
+      const textCls = isText ? ' results-metric-value--text' : '';
       return `
         <div class="results-metric${variant}">
-          <div class="results-metric-value">${val}${m.suffix || ''}</div>
+          <div class="results-metric-value${textCls}">${val}${m.suffix || ''}</div>
           <div class="results-metric-label">${m.label}</div>
         </div>`;
     }).join('');
@@ -837,7 +854,7 @@ var App = {
     const rewriteHtml = data.compliant_rewrite ? `
       <div class="sec-panel sec-panel--redacted" style="margin-top:var(--space-lg);">
         <div class="sec-panel-row"><strong>Compliant Rewrite</strong></div>
-        <pre style="white-space:pre-wrap;opacity:0.85;font-size:0.8rem;">${data.compliant_rewrite}</pre>
+        <div style="opacity:0.85;font-size:0.8rem;line-height:1.7;">${this._md(data.compliant_rewrite)}</div>
       </div>` : '';
 
     return `
@@ -869,7 +886,7 @@ var App = {
           <thead><tr><th>Position</th><th>Weight</th><th>Overnight P&L</th></tr></thead>
           <tbody>${positionsHtml}</tbody>
         </table>` : ''}
-      <div class="synthesis-brief">${(data.brief || '').replace(/\n/g, '<br>')}</div>`;
+      <div class="synthesis-brief">${this._md(data.brief)}</div>`;
   },
 
   // ── Output Results ─────────────────────────────────────

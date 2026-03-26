@@ -1663,3 +1663,15 @@ body::before {
 .output-log { width: 100%; border-collapse: collapse; margin-top: var(--space-xl); font-size: 0.82rem; font-family: var(--font-mono); }
 .output-log th { font-size: 0.65rem; text-transform: uppercase; letter-spacing: 0.1em; color: var(--text-dim); padding: 6px 12px; border-bottom: 1px solid var(--border-subtle); text-align: left; }
 .output-log td { padding: 7px 12px; border-bottom: 1px solid rgba(255,255,255,0.04); }
+
+
+/* ── Markdown Rendered Content ────────────────────────────── */
+
+.md-h2 { font-family: var(--font-serif); font-size: 1.1rem; color: var(--text-primary); margin: 1em 0 0.4em; font-weight: 600; }
+.md-h3 { font-family: var(--font-mono); font-size: 0.78rem; text-transform: uppercase; letter-spacing: 0.08em; color: var(--accent-gold); margin: 1em 0 0.3em; font-weight: 400; }
+.md-li { padding-left: 1em; text-indent: -0.6em; margin-bottom: 0.3em; }
+.md-num { font-family: var(--font-mono); font-size: 0.8em; color: var(--accent-gold); font-weight: 600; }
+
+/* ── Text-sized Metric Values ─────────────────────────────── */
+
+.results-metric-value--text { font-size: 1.1rem; font-family: var(--font-mono); letter-spacing: 0.04em; text-transform: uppercase; }
