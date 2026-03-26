@@ -69,7 +69,7 @@ const CONFIG = {
       status: "queued",
       icon: "⊞",
       accent: "#34D399",
-      dataFile: null,
+      dataFile: "data/build_04.json",
       tags: [
         "Embeddings",
         "Vector Search",
@@ -86,7 +86,7 @@ const CONFIG = {
       status: "queued",
       icon: "∞",
       accent: "#FBBF24",
-      dataFile: null,
+      dataFile: "data/build_05.json",
       tags: ["Meta-Agent", "Prompt Store", "Append-Only", "Auto-Improvement"],
     },
     {
@@ -97,7 +97,7 @@ const CONFIG = {
       status: "queued",
       icon: "⬡",
       accent: "#F472B6",
-      dataFile: null,
+      dataFile: "data/build_06.json",
       tags: [
         "3 Agents",
         "Parallel Execution",
@@ -115,7 +115,7 @@ const CONFIG = {
       status: "queued",
       icon: "✓",
       accent: "#6EE7B7",
-      dataFile: null,
+      dataFile: "data/build_07.json",
       tags: [
         "Regulatory Rules",
         "Violation Detection",
@@ -131,7 +131,7 @@ const CONFIG = {
       status: "queued",
       icon: "◈",
       accent: "#38BDF8",
-      dataFile: null,
+      dataFile: "data/build_08.json",
       tags: [
         "Briefing Generator",
         "Multi-Source",
@@ -147,7 +147,7 @@ const CONFIG = {
       status: "queued",
       icon: "⇒",
       accent: "#C084FC",
-      dataFile: null,
+      dataFile: "data/build_09.json",
       tags: ["Telegram", "Slack", "Delivery Log", "Dry Run", "Chunking"],
     },
   ],

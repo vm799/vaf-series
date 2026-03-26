@@ -385,37 +385,18 @@ var App = {
   renderResultsTab(config, content) {
     const rc = content.resultsConfig;
 
-    if (config.status === 'queued' || config.status === 'hidden') {
-      return `
-        <div class="results-empty">
-          <div class="results-empty-icon">◇</div>
-          <p class="results-empty-text">${rc.emptyMessage}</p>
-        </div>
-      `;
+    if (config.status === 'hidden') {
+      return `<div class="results-empty"><div class="results-empty-icon">◇</div><p class="results-empty-text">${rc.emptyMessage}</p></div>`;
     }
 
-    if (config.status === 'running') {
-      return `
-        <div class="results-empty">
-          <div class="results-empty-icon" style="animation: pulse 2s infinite">◈</div>
-          <p class="results-empty-text">
-            Build is currently in progress. Results will appear here when complete.
-          </p>
-        </div>
-      `;
-    }
-
-    // Status is "live" — try to load data
+    // Always try to load data if a dataFile is configured — show preview for queued/running builds too
     if (!config.dataFile) {
-      return `
-        <div class="results-empty">
-          <div class="results-empty-icon">◇</div>
-          <p class="results-empty-text">
-            Build is live but no data file is configured yet.
-            Update config.js with the dataFile path.
-          </p>
-        </div>
-      `;
+      const msg = config.status === 'queued'
+        ? (rc.emptyMessage || 'Coming soon.')
+        : 'Build is running — results will appear here when complete.';
+      const icon = config.status === 'running' ? '◈' : '◇';
+      const anim = config.status === 'running' ? ' style="animation: pulse 2s infinite"' : '';
+      return `<div class="results-empty"><div class="results-empty-icon"${anim}>${icon}</div><p class="results-empty-text">${msg}</p></div>`;
     }
 
     // Create a container that will be populated by async data load
