@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Build Detail — The VAF Series</title>
+  <link rel="stylesheet" href="css/style.css">
+  <script>
+    // Update page title once build data loads
+    document.addEventListener('DOMContentLoaded', () => {
+      const id = new URLSearchParams(window.location.search).get('id');
+      if (id && typeof BUILDS !== 'undefined' && BUILDS[id]) {
+        document.title = `Build ${id}: ${BUILDS[id].hero.title} — The VAF Series`;
+      }
+    });
+  </script>
+</head>
+<body>
+  <div class="page-wrapper">
+
+    <!-- Build Page Layout: Sidebar + Content -->
+    <div class="build-page">
+
+      <!-- Sidebar Navigation -->
+      <aside class="build-sidebar">
+        <a href="index.html" class="sidebar-brand">← VAF Series</a>
+
+        <div style="margin-bottom:var(--space-lg);">
+          <div style="font-family:var(--font-mono); font-size:0.6rem; color:var(--text-dim); text-transform:uppercase; letter-spacing:0.12em; margin-bottom:var(--space-sm);">
+            Modules
+          </div>
+          <nav id="sidebar-nav" class="sidebar-nav">
+            <!-- Populated by app.js -->
+          </nav>
+        </div>
+
+        <div style="margin-top:auto; padding-top:var(--space-xl); border-top:1px solid var(--border-subtle);">
+          <div class="nav-status" id="nav-status" style="justify-content:flex-start;">
+            <!-- Populated by app.js -->
+          </div>
+        </div>
+      </aside>
+
+      <!-- Main Content -->
+      <main class="build-content" id="build-content">
+
+        <!-- Build Hero -->
+        <div class="build-hero" id="build-hero">
+          <!-- Populated by app.js -->
+        </div>
+
+        <!-- Tabs -->
+        <div class="tabs" id="build-tabs">
+          <!-- Populated by app.js -->
+        </div>
+
+        <!-- Tab Panels -->
+        <div id="build-panels">
+          <!-- Populated by app.js -->
+        </div>
+
+        <!-- Navigation between builds -->
+        <div style="display:flex; justify-content:space-between; margin-top:var(--space-3xl); padding-top:var(--space-xl); border-top:1px solid var(--border-subtle);" id="build-nav-footer">
+        </div>
+
+        <!-- Footer -->
+        <footer class="footer" style="margin-top:var(--space-xl);">
+          <p>
+            <span class="author">Built by Vaishali Mehmi</span>
+          </p>
+          <p class="credit">
+            Powered by Claude AI + Anthropic Agents
+          </p>
+        </footer>
+
+      </main>
+    </div>
+
+  </div>
+
+  <script src="js/config.js"></script>
+  <script src="js/builds.js"></script>
+  <script src="js/app.js"></script>
+  <script>
+    App.init('build');
+
+    // Render prev/next navigation
+    (function() {
+      const id = new URLSearchParams(window.location.search).get('id');
+      const idx = CONFIG.builds.findIndex(b => b.id === id);
+      const footer = document.getElementById('build-nav-footer');
+      if (!footer) return;
+
+      const prev = idx > 0 ? CONFIG.builds[idx - 1] : null;
+      const next = idx < CONFIG.builds.length - 1 ? CONFIG.builds[idx + 1] : null;
+
+      footer.innerHTML = `
+        ${prev ? `<a href="build.html?id=${prev.id}" class="btn btn-ghost">← ${prev.id} ${prev.shortName}</a>` : '<span></span>'}
+        ${next ? `<a href="build.html?id=${next.id}" class="btn btn-ghost">${next.id} ${next.shortName} →</a>` : '<span></span>'}
+      `;
+    })();
+  </script>
+</body>
+</html>

@@ -1,0 +1,8 @@
+.DS_Store
+.env
+*.db
+__pycache__/
+*.pyc
+.venv/
+node_modules/
+portfolio/data/
